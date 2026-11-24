@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>點亮星河</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-0:#040d33;
+  --navy-1:#0a1f63;
+  --navy-2:#14389a;
+  --calpis:#1d5fd1;
+  --sky:#8fcdf4;
+  --mist:#d9efff;
+  --milk:#ffffff;
+  --dim:rgba(217,239,255,.68);
+  --faint:rgba(217,239,255,.16);
+  --line:rgba(160,210,255,.24);
+  --glass:rgba(12,34,100,.55);
+  --gold:#ffd77a;
+  --ink:#0a1f63;
+  --ink-dim:#4a6296;
+  --day:#eef7ff;
+  --dot:#d3eafb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans TC",system-ui,sans-serif;color:var(--milk);background:var(--navy-0);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.hand{font-family:"LXGW WenKai TC","Noto Sans TC",serif}
+.vh{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ---------- top bar & nav ---------- */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+  background:linear-gradient(180deg,rgba(4,13,51,.85),rgba(4,13,51,.55));backdrop-filter:blur(10px);border-bottom:1px solid rgba(160,210,255,.1)}
+.mark{display:flex;flex-direction:column;line-height:1;text-decoration:none}
+.mark b{font-weight:900;font-size:18px;letter-spacing:.08em}
+.mark span{font-family:"Cinzel",serif;font-weight:700;font-size:10px;letter-spacing:.32em;color:var(--sky);margin-top:3px}
+.nav{display:none;gap:26px;font-size:14px}
+.nav a{text-decoration:none;color:var(--dim);padding:6px 0;border-bottom:2px solid transparent}
+.nav a.on{color:var(--milk);border-color:var(--milk)}
+.top-r{display:flex;gap:10px;align-items:center}
+.iconbtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);display:grid;place-items:center}
+.iconbtn svg{width:18px;height:18px}
+.cta-top{display:none!important}
+@media (min-width:880px){.nav{display:flex}.cta-top{display:inline-flex!important}.tabbar{display:none!important}}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(4,13,51,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(160,210,255,.14)}
+.tabbar a,.tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--dim);text-decoration:none;background:none;border:none;padding:4px 0}
+.tabbar svg{width:21px;height:21px}
+.tabbar a.on{color:var(--milk)}
+.tabbar .lightbtn{margin-top:-26px;color:var(--milk);font-weight:700}
+.tabbar .lightbtn i{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#fff,#cfe9ff);
+  box-shadow:0 0 0 4px var(--navy-0),0 0 24px rgba(143,205,244,.8)}
+.tabbar .lightbtn svg{width:34px;height:34px}
+
+/* ---------- buttons ---------- */
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 26px;font-weight:700;font-size:15px;border:1.5px solid var(--milk);
+  background:var(--milk);color:var(--calpis);text-decoration:none;box-shadow:0 0 24px rgba(143,205,244,.45);transition:transform .15s}
+.pill:active{transform:scale(.97)}
+.pill.ghost{background:rgba(4,13,51,.3);color:var(--milk);box-shadow:none}
+.pill.sm{padding:8px 16px;font-size:13.5px}
+.pill.blue{background:linear-gradient(180deg,#3a7ff0,var(--calpis));color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(29,95,209,.45)}
+.pill.block{width:100%}
+
+/* ---------- views ---------- */
+main{padding-top:60px;padding-bottom:84px}
+@media (min-width:880px){main{padding-bottom:0}}
+.view{display:none}
+.view.on{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0}}
+.page{max-width:1120px;margin:0 auto;padding:26px 16px 60px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:min(94vh,780px);overflow:hidden;display:flex}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.scene{position:absolute;left:0;right:0;bottom:0;width:100%;height:38%}
+.hero-copy{position:relative;z-index:3;width:100%;max-width:1120px;margin:0 auto;padding:44px 20px 0}
+.hero h1{font-family:"LXGW WenKai TC",serif;font-weight:700;font-size:clamp(34px,8.6vw,88px);line-height:1.12;transform:rotate(-5deg);transform-origin:left;
+  text-shadow:0 0 30px rgba(143,205,244,.75),0 0 2px #fff;letter-spacing:.04em}
+.hero h1 span{display:block;padding-left:.6em;white-space:nowrap}
+@media (min-width:700px){.hero h1 span{padding-left:1.2em}}
+.hero .sub{font-family:"LXGW WenKai TC",serif;font-size:clamp(17px,3.6vw,22px);color:var(--mist);margin:26px 0 0 clamp(20px,22vw,300px);line-height:1.7;letter-spacing:.06em}
+.hero .btns{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0 0 clamp(0px,18vw,250px)}
+.bottle{position:absolute;z-index:2;left:3%;bottom:5%;width:clamp(100px,17vw,215px);transform:rotate(-9deg);filter:drop-shadow(0 0 28px rgba(143,205,244,.65))}
+.couple{position:absolute;z-index:2;right:6%;bottom:16%;width:clamp(78px,12vw,150px)}
+.dot-tw{animation:dtw 2.6s ease-in-out infinite}
+@keyframes dtw{50%{fill:#fff}}
+
+/* ---------- polka -> star band ---------- */
+.band{position:relative;height:300px}
+.band canvas{position:absolute;inset:0;width:100%;height:100%}
+.band p{position:absolute;left:0;right:0;top:30%;text-align:center;font-family:"LXGW WenKai TC",serif;font-size:clamp(18px,4.4vw,26px);padding:0 16px;
+  text-shadow:0 0 16px rgba(4,13,51,.9);letter-spacing:.06em;line-height:1.6}
+.band p small{display:block;font-family:"Cinzel",serif;font-size:12px;color:var(--mist);letter-spacing:.3em;margin-top:6px}
+
+/* ---------- day (light) section ---------- */
+.daysec{color:var(--ink);background-color:var(--day);
+  background-image:radial-gradient(var(--dot) 24%,transparent 25%),radial-gradient(var(--dot) 24%,transparent 25%);
+  background-size:40px 40px;background-position:0 0,20px 20px}
+.daysec .page{padding-top:34px}
+.sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.sec-h h2{font-size:24px;font-weight:900;letter-spacing:.06em}
+.sec-h span{color:var(--ink-dim);font-size:14px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px 12px;background:rgba(255,255,255,.88);border-radius:22px;padding:22px 16px;box-shadow:0 10px 30px rgba(29,95,209,.1)}
+.step{text-align:center}
+.step .ic{width:74px;height:74px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#ffffff,#d6ecff);box-shadow:inset 0 0 0 1px #cfe5fb}
+.step .ic svg{width:38px;height:38px}
+.step b{display:block;font-size:15px}
+.step b em{font-style:normal;color:var(--calpis);margin-right:6px;font-family:"Cinzel",serif}
+.step span{font-size:12.5px;color:var(--ink-dim);line-height:1.6}
+.grid2{display:grid;gap:16px;margin-top:22px}
+@media (min-width:880px){.grid2{grid-template-columns:1.15fr 1fr}}
+.panel-l{background:rgba(255,255,255,.88);border-radius:22px;padding:20px;box-shadow:0 10px 30px rgba(29,95,209,.1)}
+.panel-l h3{font-size:17px;font-weight:900;margin-bottom:12px}
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tl div{border-radius:16px;padding:14px 8px;text-align:center;color:#fff;background:radial-gradient(120% 100% at 50% 0%,#1f4fb8,var(--navy-1))}
+.tl small{font-size:11px;color:var(--sky);letter-spacing:.1em}
+.tl b{display:block;font-family:"Cinzel",serif;font-size:22px;margin:2px 0}
+.tl strong{display:block;font-size:16px;letter-spacing:.1em}
+.tl span{display:block;font-size:11.5px;color:var(--mist);margin-top:6px;line-height:1.5}
+.tl div.now{box-shadow:0 0 0 2px var(--gold)}
+.eq{text-align:center;font-size:13.5px;color:var(--ink-dim);margin-top:12px;font-weight:500}
+.rw3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rw3 figure{text-align:center}
+.rw3 .art{aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:radial-gradient(circle at 50% 40%,#1f4fb8,var(--navy-0));display:grid;place-items:center}
+.rw3 .art svg{width:100%;height:100%}
+.rw3 figcaption{font-size:13px;font-weight:700;margin-top:8px;line-height:1.5}
+.rw3 figcaption span{display:block;font-weight:400;font-size:11.5px;color:var(--ink-dim)}
+
+/* ---------- footer ---------- */
+footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26px 16px 30px}
+.foot{max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.foot small{font-size:12px;color:var(--dim);line-height:1.8}
+.foot .hand{font-size:20px;color:var(--mist);transform:rotate(-4deg)}
+.foot .note{width:100%;font-size:11.5px;color:rgba(217,239,255,.4);line-height:1.8}
+.foot .note button{background:none;border:none;text-decoration:underline;color:inherit;font-size:11.5px}
+
+/* ---------- night pages ---------- */
+.nightbg{background:radial-gradient(120% 60% at 50% 0%,#0f2c85 0%,var(--navy-1) 40%,var(--navy-0) 100%);min-height:calc(100vh - 60px);position:relative}
+.nightbg::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(1px 1px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 72% 12%,#fff,transparent),radial-gradient(1.5px 1.5px at 40% 30%,#cfe9ff,transparent),
+  radial-gradient(1px 1px at 86% 42%,#fff,transparent),radial-gradient(1px 1px at 22% 62%,#fff,transparent),radial-gradient(1.5px 1.5px at 60% 78%,#cfe9ff,transparent),radial-gradient(1px 1px at 92% 88%,#fff,transparent);
+  background-size:420px 420px}
+.nightbg .page{position:relative}
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.ph h2{font-size:clamp(24px,6vw,32px);font-weight:900;letter-spacing:.08em}
+.ph h2 small{font-size:15px;font-weight:500;color:var(--dim);margin-left:12px;padding-left:12px;border-left:1px solid var(--line);letter-spacing:.04em}
+.ph p{width:100%;color:var(--dim);font-size:14px;margin-top:6px;line-height:1.7}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(8px)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0 12px}
+.chip{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:999px;padding:7px 14px;font-size:13px}
+.chip.on{background:var(--milk);color:var(--ink);border-color:var(--milk);font-weight:700}
+.chip.dash{border-style:dashed;color:var(--dim)}
+
+.medals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 8px;padding:20px 12px}
+@media (min-width:640px){.medals{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:960px){.medals{grid-template-columns:repeat(6,1fr);gap:22px 14px;padding:28px 22px}}
+.medal{background:none;border:none;text-align:center;border-radius:20px;padding:4px;transition:transform .2s}
+.medal:hover{transform:translateY(-3px)}
+.medal .disc{position:relative;aspect-ratio:1/1;border-radius:50%;transition:box-shadow .12s}
+.medal .disc svg{width:100%;height:100%;display:block}
+.medal b{display:block;font-size:14px;margin-top:6px;letter-spacing:.08em}
+.medal em{display:block;font-style:normal;font-family:"Cinzel",serif;font-size:10.5px;color:var(--dim);letter-spacing:.08em}
+.medal .pg{position:absolute;right:0;top:2%;font-size:10.5px;background:rgba(4,13,51,.8);border:1px solid var(--line);border-radius:999px;padding:1px 7px;color:var(--mist)}
+.medal.full .pg{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:700}
+.medal.scan .disc{box-shadow:0 0 0 3px #fff,0 0 30px rgba(143,205,244,.9)}
+.medal.hit .disc{animation:hit 1.4s ease-out}
+@keyframes hit{0%{box-shadow:0 0 0 4px #fff,0 0 60px #bfe6ff}100%{box-shadow:0 0 0 0 transparent}}
+.hint{font-size:12.5px;color:var(--dim);text-align:center;margin-top:12px}
+
+.st-new{transform-box:fill-box;transform-origin:center;animation:pop .9s cubic-bezier(.2,1.7,.4,1)}
+@keyframes pop{0%{transform:scale(0)}}
+.st-ring{transform-box:fill-box;transform-origin:center;fill:none;stroke:#e6f5ff;stroke-width:.6;animation:ring 1.4s ease-out forwards}
+@keyframes ring{0%{transform:scale(.3);opacity:1}100%{transform:scale(5);opacity:0}}
+.st-halo{animation:tw 3.4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.55}}
+.seq{opacity:0;animation:seqin .6s ease forwards}
+@keyframes seqin{to{opacity:1}}
+
+/* dipper */
+.dip{display:grid;overflow:hidden;margin-top:16px}
+@media (min-width:880px){.dip{grid-template-columns:1.6fr 1fr}}
+.dip .map{position:relative;background:radial-gradient(80% 90% at 40% 50%,rgba(47,98,220,.45),transparent)}
+.dip .map svg{width:100%;display:block}
+.dip .side{padding:22px;border-top:1px solid var(--line)}
+@media (min-width:880px){.dip .side{border-top:0;border-left:1px solid var(--line)}}
+.dip .side h3{font-family:"LXGW WenKai TC",serif;font-size:22px;line-height:1.5}
+.dip .big{font-family:"Cinzel",serif;font-size:42px;font-weight:700;margin:10px 0}
+.dip .big small{font-size:22px;color:var(--dim)}
+.bottles{display:flex;gap:6px;margin-bottom:18px}
+.bottles svg{width:24px;height:52px}
+.lockcover{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:rgba(4,13,51,.55);backdrop-filter:blur(2px);padding:20px}
+.lockcover b{font-size:18px;display:block;margin-bottom:4px}
+.lockcover span{font-size:13.5px;color:var(--dim);line-height:1.7}
+.tag{display:inline-block;font-size:11.5px;border-radius:999px;padding:2px 10px;font-weight:700;flex:none}
+.tag.open{background:#47d18c;color:#04361d}
+.tag.limit{background:var(--gold);color:#4a3300}
+.tag.lock{background:rgba(255,255,255,.14);color:var(--dim)}
+.dtl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.dtl div{border:1px solid var(--line);border-radius:14px;padding:10px 6px;text-align:center;background:rgba(255,255,255,.04)}
+.dtl div.now{border-color:var(--gold);box-shadow:0 0 18px rgba(255,215,122,.3)}
+.dtl b{font-family:"Cinzel",serif;font-size:17px;display:block}
+.dtl strong{font-size:13.5px;display:block;letter-spacing:.08em}
+.dtl span{font-size:11px;color:var(--dim)}
+.meta{font-size:12px;color:var(--dim);margin-top:12px;line-height:1.7}
+
+/* me */
+.megrid{display:grid;gap:14px;margin-top:16px}
+@media (min-width:880px){.megrid{grid-template-columns:1fr 1fr}}
+.card{padding:18px}
+.card h3{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.prof{display:flex;gap:14px;align-items:center}
+.ava{flex:none;border-radius:50%;display:grid;place-items:center;font-weight:900;color:var(--ink)}
+.ava.lg{width:64px;height:64px;font-size:24px;box-shadow:0 0 0 3px rgba(255,255,255,.85),0 0 22px rgba(143,205,244,.6)}
+.ava.sm{width:28px;height:28px;font-size:12px}
+.prof b{font-size:18px}
+.prof .lv{font-family:"Cinzel",serif;font-size:13px;color:var(--sky);margin-left:6px}
+.xp{height:7px;border-radius:9px;background:var(--faint);margin:8px 0 4px;overflow:hidden}
+.xp i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--calpis),var(--sky),#fff)}
+.prof small{font-size:12px;color:var(--dim)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stats div{border:1px solid var(--line);border-radius:14px;padding:10px;background:rgba(255,255,255,.04)}
+.stats span{font-size:11.5px;color:var(--dim);display:block}
+.stats b{font-size:22px;font-weight:900}
+.stats b small{font-size:12px;color:var(--dim);font-weight:500}
+.maps{display:grid;gap:10px}
+.maprow{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:10px 12px;background:rgba(255,255,255,.04);text-decoration:none;text-align:left;width:100%}
+.maprow svg{flex:none;width:64px;height:40px}
+.maprow div{flex:1;min-width:0}
+.maprow b{font-size:14px;display:block}
+.maprow span{font-size:12px;color:var(--dim)}
+.maprow.locked{opacity:.6}
+.pin{text-align:center;border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(255,255,255,.04)}
+.pin small{font-size:12px;color:var(--dim)}
+.pin .code{font-family:"Cinzel",serif;font-size:36px;letter-spacing:.22em;font-weight:700;margin:4px 0 10px;text-shadow:0 0 16px rgba(143,205,244,.7)}
+.members{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.mem{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 11px 3px 3px;font-size:12.5px;background:rgba(255,255,255,.05)}
+.mem b{font-weight:900}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.feed{display:grid;gap:8px}
+.feed li{list-style:none;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--dim)}
+.feed li b{color:var(--milk);font-weight:500}
+.feed .d{width:8px;height:8px;border-radius:50%;flex:none}
+.feed .t{margin-left:auto;font-size:11px;opacity:.6;flex:none}
+.coll{display:flex;flex-wrap:wrap;gap:10px}
+.coll div{width:64px;text-align:center;font-size:11px;color:var(--dim)}
+.coll svg{width:64px;height:64px;display:block}
+.empty{font-size:13px;color:var(--dim)}
+.login-cta{text-align:center;padding:36px 20px}
+.login-cta h3{font-family:"LXGW WenKai TC",serif;font-size:26px;margin-bottom:8px}
+.login-cta p{color:var(--dim);font-size:14px;line-height:1.7;margin-bottom:18px}
+
+/* ---------- sheets ---------- */
+.veil{position:fixed;inset:0;z-index:60;background:rgba(1,5,22,.72);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center}
+.veil.open{display:flex}
+@media (min-width:700px){.veil{align-items:center;padding:20px}}
+.sheet{position:relative;width:100%;max-width:460px;max-height:92vh;overflow:auto;border:1px solid var(--line);border-bottom:0;border-radius:26px 26px 0 0;padding:22px 20px 28px;
+  background:radial-gradient(120% 70% at 50% 0%,#17409f,var(--navy-1) 55%,var(--navy-0));animation:up .35s cubic-bezier(.2,1,.3,1)}
+@media (min-width:700px){.sheet{border-radius:26px;border-bottom:1px solid var(--line)}}
+.sheet.gold{background:radial-gradient(120% 70% at 50% 0%,#6b5212,var(--navy-1) 55%,var(--navy-0))}
+@keyframes up{from{transform:translateY(50px);opacity:0}}
+.x{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.08);font-size:18px;line-height:1}
+.sheet h3{font-size:22px;font-weight:900;text-align:center;margin:14px 0 6px;letter-spacing:.06em}
+.sheet h3.hand{font-weight:700;font-size:26px}
+.sheet .lead{text-align:center;color:var(--dim);font-size:13.5px;line-height:1.7;margin-bottom:16px}
+.field{width:100%;padding:13px 18px;border-radius:999px;border:1px solid rgba(160,210,255,.4);background:rgba(4,13,51,.45);color:var(--milk);outline:none;font-size:15px;margin-bottom:10px}
+.field:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(143,205,244,.25)}
+.field::placeholder{color:rgba(217,239,255,.4)}
+.field.code{text-align:center;font-family:"Cinzel",serif;font-weight:700;font-size:22px;letter-spacing:.2em;text-transform:uppercase;border-radius:16px}
+.sheet .foot-s{text-align:center;font-size:12.5px;color:var(--dim);margin-top:14px}
+.sheet .foot-s button{background:none;border:none;color:var(--sky);text-decoration:underline;font-size:12.5px}
+.err{color:#ffb3c7;font-size:13px;text-align:center;min-height:20px;margin-top:4px}
+.cap{width:120px;margin:0 auto;display:block}
+.detail-art{width:min(300px,80%);margin:0 auto;display:block}
+.dname{display:flex;align-items:baseline;gap:10px;justify-content:center;margin-top:6px}
+.dname b{font-size:28px;letter-spacing:.14em}
+.dname em{font-style:normal;font-family:"Cinzel",serif;color:var(--sky);letter-spacing:.1em}
+.starlist{margin:12px 0;display:grid;gap:8px}
+.starlist li{list-style:none;display:flex;gap:10px;align-items:center;font-size:14px;border-bottom:1px solid var(--faint);padding-bottom:8px}
+.starlist li i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;border:1px solid var(--line);color:var(--dim)}
+.starlist li.on i{background:#fff;color:var(--calpis);box-shadow:0 0 12px rgba(143,205,244,.9)}
+.prize{border:1px dashed rgba(217,239,255,.35);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--dim);margin-top:12px}
+.prize b{display:block;color:var(--milk);font-size:14.5px}
+.prize code{display:block;font-family:"Cinzel",serif;font-size:17px;letter-spacing:.14em;color:var(--gold);margin-top:4px}
+.whos{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;justify-content:center}
+.memo img{width:100%;border-radius:14px;display:block;margin-bottom:12px}
+
+.toast{position:fixed;left:50%;top:70px;transform:translate(-50%,-180%);z-index:80;max-width:calc(100% - 32px);width:max-content;text-align:center;line-height:1.55;
+  background:rgba(10,31,99,.96);border:1px solid rgba(143,205,244,.5);padding:10px 18px;border-radius:16px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 24px rgba(143,205,244,.35);
+  transition:transform .45s cubic-bezier(.2,1.3,.4,1),opacity .3s;opacity:0;visibility:hidden}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.toast small{display:block;color:var(--dim);font-size:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg class="vh" aria-hidden="true"><defs>
+  <radialGradient id="halo"><stop offset="0" stop-color="#fff"/><stop offset=".22" stop-color="#e8f6ff" stop-opacity=".95"/><stop offset=".45" stop-color="#8fcdf4" stop-opacity=".45"/><stop offset="1" stop-color="#5aa8ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="haloG"><stop offset="0" stop-color="#fff"/><stop offset=".22" stop-color="#fff3cf" stop-opacity=".95"/><stop offset=".45" stop-color="#ffd77a" stop-opacity=".45"/><stop offset="1" stop-color="#ffb84a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="medal" cx=".5" cy=".42"><stop offset="0" stop-color="#3b78e6"/><stop offset=".5" stop-color="#173f9e"/><stop offset="1" stop-color="#0a1f63"/></radialGradient>
+  <radialGradient id="medalDim" cx=".5" cy=".42"><stop offset="0" stop-color="#1d4396"/><stop offset=".6" stop-color="#0f2a72"/><stop offset="1" stop-color="#081a52"/></radialGradient>
+  <linearGradient id="btl" x1="0" x2="1"><stop offset="0" stop-color="#dfeeff"/><stop offset=".45" stop-color="#ffffff"/><stop offset="1" stop-color="#c9e2fb"/></linearGradient>
+</defs></svg>
+
+<header class="topbar">
+  <a class="mark" href="#home"><b>可爾必思</b><span>CALPIS</span></a>
+  <nav class="nav">
+    <a href="#home" data-r="home">首頁</a>
+    <a href="#map" data-r="map">星河地圖</a>
+    <a href="#dipper" data-r="dipper">北斗七星地圖</a>
+    <a href="#me" data-r="me">我的星河</a>
+    <a href="#home" data-about>活動說明</a>
+  </nav>
+  <div class="top-r">
+    <button class="pill sm cta-top" data-act="light">輸入序號點亮</button>
+    <a class="iconbtn" href="#me" aria-label="我的星河"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></a>
+  </div>
+</header>
+
+<main>
+  <!-- ============ HOME ============ -->
+  <section class="view" id="v-home">
+    <div class="hero">
+      <canvas id="heroSky"></canvas>
+      <svg class="scene" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="lake" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a5fc4"/><stop offset=".5" stop-color="#0c2466"/><stop offset="1" stop-color="#040d33"/></linearGradient>
+          <linearGradient id="glowH" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8fcdf4" stop-opacity="0"/><stop offset="1" stop-color="#8fcdf4" stop-opacity=".35"/></linearGradient>
+        </defs>
+        <rect x="0" y="60" width="1200" height="80" fill="url(#glowH)"/>
+        <path d="M0 140 L0 92 Q80 70 150 96 T300 84 Q380 50 460 88 T640 92 Q720 60 800 90 T980 80 Q1080 58 1200 96 L1200 140Z" fill="#0d2a78" opacity=".85"/>
+        <path d="M0 140 L0 112 Q120 92 220 116 T420 110 Q520 96 600 118 T820 112 Q940 92 1040 116 T1200 110 L1200 140Z" fill="#081b55"/>
+        <rect x="0" y="138" width="1200" height="162" fill="url(#lake)"/>
+        <g stroke="#bfe3f7" stroke-linecap="round" opacity=".55">
+          <line x1="540" y1="160" x2="660" y2="160" stroke-width="2"/><line x1="500" y1="178" x2="700" y2="178" stroke-width="1.4" opacity=".7"/>
+          <line x1="560" y1="198" x2="640" y2="198" stroke-width="1.2" opacity=".6"/><line x1="200" y1="186" x2="300" y2="186" stroke-width="1" opacity=".4"/>
+          <line x1="880" y1="190" x2="1010" y2="190" stroke-width="1" opacity=".4"/>
+        </g>
+        <path d="M0 300 L0 196 Q60 170 140 180 Q220 186 300 222 Q340 250 360 300Z" fill="#030a2a"/>
+        <path d="M1200 300 L1200 210 Q1120 196 1020 214 Q920 230 860 262 Q830 280 820 300Z" fill="#030a2a"/>
+      </svg>
+      <svg class="couple" viewBox="0 0 150 110" aria-hidden="true">
+        <g fill="#030a2a">
+          <circle cx="44" cy="22" r="13"/><path d="M26 40q18-10 36 0l8 40q-26 8-52 0z"/><path d="M18 80q30 -6 60 0v10H18z"/>
+          <circle cx="98" cy="26" r="12"/><path d="M80 44q18-9 34 0l6 36q-24 8-46 0z"/><path d="M70 80q28-6 56 0v10H70z"/>
+          <path d="M60 52q10-6 22 0" stroke="#030a2a" stroke-width="6" fill="none"/>
+        </g>
+      </svg>
+      <svg class="bottle" viewBox="0 0 120 300" aria-label="水玉星空瓶">
+        <defs><clipPath id="bclip"><path d="M44 46h32v10q0 10 12 22q20 20 20 46v146q0 18-18 18H30q-18 0-18-18V124q0-26 20-46q12-12 12-22z"/></clipPath></defs>
+        <rect x="40" y="10" width="40" height="34" rx="5" fill="#f4faff"/>
+        <g stroke="#cfe4f8" stroke-width="1.4"><line x1="46" y1="12" x2="46" y2="42"/><line x1="53" y1="12" x2="53" y2="42"/><line x1="60" y1="12" x2="60" y2="42"/><line x1="67" y1="12" x2="67" y2="42"/><line x1="74" y1="12" x2="74" y2="42"/></g>
+        <path d="M44 46h32v10q0 10 12 22q20 20 20 46v146q0 18-18 18H30q-18 0-18-18V124q0-26 20-46q12-12 12-22z" fill="url(#btl)"/>
+        <g clip-path="url(#bclip)" id="bdots"></g>
+        <g transform="rotate(-18 60 170)">
+          <rect x="10" y="150" width="100" height="46" rx="8" fill="#fff" opacity=".92"/>
+          <text x="60" y="174" text-anchor="middle" font-family="Cinzel,serif" font-weight="700" font-size="24" fill="#1d5fd1" letter-spacing="1">CALPIS</text>
+          <text x="60" y="190" text-anchor="middle" font-family="Noto Sans TC,sans-serif" font-weight="900" font-size="11" fill="#1d5fd1" letter-spacing="2">可爾必思</text>
+        </g>
+      </svg>
+      <div class="hero-copy">
+        <h1>一起點亮<span>屬於我們的星河</span></h1>
+        <p class="sub">每一瓶可爾必思，<br>都是點亮星星的機會。</p>
+        <div class="btns"><a class="pill" href="#map">進入星河地圖</a><a class="pill ghost" href="#home" data-about>了解活動</a></div>
+      </div>
+    </div>
+
+    <div class="band">
+      <canvas id="band"></canvas>
+      <p>瓶身上的每一顆水玉，<br>都是夜空裡等你點亮的星。<small>CALPIS DOTS · STARRY NIGHT</small></p>
+    </div>
+
+    <div class="daysec" id="about">
+      <div class="page">
+        <div class="sec-h"><h2>參與方式</h2><span>5 步驟，點亮你的星河</span></div>
+        <div class="steps">
+          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="none" stroke="#1d5fd1" stroke-width="2.2" stroke-linecap="round"><circle cx="15" cy="13" r="6"/><path d="M4 32c1-6 6-9 11-9 3 0 5 1 7 2"/><rect x="22" y="24" width="14" height="10" rx="2"/><path d="M22 25l7 5 7-5"/></svg></div><b><em>1</em>進入網站</b><span>登入／註冊<br>（Email 驗證碼）</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="none" stroke="#1d5fd1" stroke-width="2.2"><circle cx="20" cy="20" r="14"/><rect x="13" y="13" width="5" height="5"/><rect x="22" y="13" width="5" height="5"/><rect x="13" y="22" width="5" height="5"/><path d="M22 22h2v2M27 25v2h-3"/></svg></div><b><em>2</em>掃描瓶身</b><span>掃瓶身 QR Code<br>輸入瓶蓋序號</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#1d5fd1"/><path d="M20 10l3 6.5 7 .8-5.2 4.8 1.5 7L20 25.6 13.7 29l1.5-7L10 17.3l7-.8z" fill="#ffd77a"/></svg></div><b><em>3</em>點亮星星</b><span>星星隨機落下<br>收藏到你的星河</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="#1d5fd1"><circle cx="20" cy="13" r="5"/><circle cx="9" cy="16" r="4"/><circle cx="31" cy="16" r="4"/><path d="M11 32c0-6 4-10 9-10s9 4 9 10z"/><path d="M2 30c0-5 3-8 7-8 2 0 3 .5 4 1.5-2 2-3 4-3.5 6.5zM38 30c0-5-3-8-7-8-2 0-3 .5-4 1.5 2 2 3 4 3.5 6.5z"/></svg></div><b><em>4</em>邀請朋友</b><span>分享 PIN Code<br>一起集星</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="none" stroke="#1d5fd1" stroke-width="2.2"><rect x="7" y="9" width="26" height="22" rx="3"/><circle cx="15" cy="16" r="2.5"/><path d="M8 28l8-7 5 4 5-5 7 7"/></svg></div><b><em>5</em>完成任務</b><span>解鎖限定地圖<br>生成紀念圖</span></div>
+        </div>
+        <div class="grid2">
+          <div class="panel-l">
+            <h3>4・5・6 月　每月 7 號限定</h3>
+            <div class="tl" id="tlHome"></div>
+            <p class="eq">七瓶可爾必思 × 朋友的力量 ＝ 完整的北斗七星</p>
+          </div>
+          <div class="panel-l">
+            <h3>完成後的專屬獎勵</h3>
+            <div class="rw3" id="rwHome"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAP ============ -->
+  <section class="view nightbg" id="v-map">
+    <div class="page">
+      <div class="ph"><h2>星河地圖<small>12 星座精選亮星</small></h2>
+        <button class="pill sm" data-act="light">輸入序號點亮</button>
+        <p>輸入瓶蓋序號後，星星會<b>隨機</b>落在其中一個星座。點星座可以看它的亮星與故事。</p></div>
+      <div class="chips" id="viewbar">
+        <button class="chip on" data-v="all">全部星星</button>
+        <button class="chip" data-v="me">我點亮的</button>
+        <button class="chip" data-v="friends">朋友點亮的</button>
+      </div>
+      <div class="glass"><div class="medals" id="medals"></div></div>
+      <p class="hint" id="mapHint"></p>
+    </div>
+  </section>
+
+  <!-- ============ DIPPER ============ -->
+  <section class="view nightbg" id="v-dipper">
+    <div class="page">
+      <div class="ph"><h2>北斗七星地圖<small>4・5・6 月　每月 7 號限定開放</small></h2><span class="tag limit" id="dipTag"></span></div>
+      <div class="glass dip">
+        <div class="map" id="dipMap"></div>
+        <div class="side" id="dipSide"></div>
+      </div>
+      <div class="dtl" id="dipTl"></div>
+    </div>
+  </section>
+
+  <!-- ============ ME ============ -->
+  <section class="view nightbg" id="v-me">
+    <div class="page" id="mePage"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <small id="period"></small>
+    <div class="mark"><b>可爾必思</b><span>CALPIS</span></div>
+    <div class="hand">一瓶可爾必思，點亮一顆星。</div>
+    <p class="note">本頁為活動概念原型：會員、房間與星星資料目前存在本機瀏覽器（同一台裝置用邀請連結開新分頁可模擬朋友），正式上線需串接後台做 Email 驗證、序號驗證、即時同步與兌獎。
+      <button id="reset">清除所有資料（測試用）</button></p>
+  </div>
+</footer>
+
+<nav class="tabbar">
+  <a href="#home" data-r="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>首頁</a>
+  <a href="#map" data-r="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>星河地圖</a>
+  <button class="lightbtn" data-act="light"><i><svg viewBox="0 0 40 40"><rect x="15" y="3" width="10" height="6" rx="1.5" fill="#1d5fd1"/><path d="M15 9h10v3q0 3 4 6 3 3 3 7v10q0 3-3 3H11q-3 0-3-3V25q0-4 3-7 4-3 4-6z" fill="#fff" stroke="#1d5fd1" stroke-width="1.6"/><g fill="#5fb0f0"><circle cx="14" cy="24" r="1.6"/><circle cx="20" cy="21" r="1.6"/><circle cx="26" cy="25" r="1.6"/><circle cx="17" cy="30" r="1.6"/><circle cx="24" cy="32" r="1.6"/></g></svg></i>點亮</button>
+  <a href="#dipper" data-r="dipper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="4" cy="6" r="1.5"/><circle cx="8" cy="9" r="1.5"/><circle cx="12" cy="10" r="1.5"/><circle cx="15" cy="13" r="1.5"/><circle cx="15" cy="19" r="1.5"/><circle cx="21" cy="19" r="1.5"/><circle cx="21" cy="13" r="1.5"/><path d="M5.3 6.8l1.4 1.4M9.5 9.3l1 .4M13.2 11l1 1M15 14.5v3M16.5 19h3M21 17.5v-3M19.5 13h-3"/></svg>北斗七星</a>
+  <a href="#me" data-r="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>我的星河</a>
+</nav>
+
+<div class="veil" id="veil"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ======================================================
+   DATA
+   ====================================================== */
+const CAMPAIGN = {
+  start: "2027.04.01", end: "2027.06.30", year: 2027,
+  days: [
+    {m:4, title:"七星初現", sub:"開啟北斗七星地圖，開始集結"},
+    {m:5, title:"七星連線", sub:"繼續集星，完成部分連線"},
+    {m:6, title:"七星綻放", sub:"最後集結，解鎖完整北斗七星"},
+  ],
+};
+const ZODIAC = [
+  {id:"ari",zh:"牡羊座",en:"Aries",story:"衝第一的勇氣，就像第一口的酸，讓人瞬間清醒。",
+   s:[[12,20],[22,28],[66,52],[84,70],[86,84]],l:[[0,1],[1,2],[2,3],[3,4]],names:{2:"婁宿三 Hamal",1:"婁宿一 Sheratan",0:"婁宿二 Mesarthim"}},
+  {id:"tau",zh:"金牛座",en:"Taurus",story:"慢慢品味，甜才會在舌尖停留得更久。",
+   s:[[8,14],[36,34],[44,48],[40,58],[56,60],[66,62],[86,58],[90,72],[58,78],[64,90],[4,40]],
+   l:[[0,1],[1,2],[2,3],[2,4],[4,5],[5,6],[6,7],[5,8],[8,9],[10,3]],names:{3:"畢宿五 Aldebaran",0:"五車五 Elnath",6:"昴宿星團 Pleiades"}},
+  {id:"gem",zh:"雙子座",en:"Gemini",story:"雙子座的主星北河三（Pollux）和北河二（Castor），是夜空中最明亮的一對兄弟星，象徵雙生與陪伴。",
+   s:[[22,8],[8,22],[40,62],[58,82],[56,44],[80,58],[92,60],[72,86]],
+   l:[[0,1],[1,2],[2,3],[0,4],[4,5],[5,6],[5,7],[3,7]],names:{1:"北河三 Pollux",0:"北河二 Castor",3:"井宿三 Alhena"}},
+  {id:"can",zh:"巨蟹座",en:"Cancer",story:"最溫柔的守護，是一杯冰涼剛好的可爾必思。",
+   s:[[64,14],[54,36],[46,50],[20,62],[50,90]],l:[[0,1],[1,2],[2,3],[2,4]],names:{2:"鬼宿 積尸氣",4:"柳宿增十 Tarf",0:"鬼宿四"}},
+  {id:"leo",zh:"獅子座",en:"Leo",story:"勇敢面對生活的酸，才嚐得到後來的甜。",
+   s:[[6,64],[32,46],[70,48],[76,32],[86,28],[92,38],[26,62],[78,72]],
+   l:[[0,1],[1,2],[2,3],[3,4],[4,5],[0,6],[6,7],[7,2]],names:{2:"軒轅十四 Regulus",0:"五帝座一 Denebola",3:"軒轅十二 Algieba"}},
+  {id:"vir",zh:"處女座",en:"Virgo",story:"把每個細節都照顧好，平凡也會閃閃發亮。",
+   s:[[4,60],[24,56],[38,52],[50,34],[62,40],[72,36],[74,18],[86,18],[86,30],[50,70],[28,72],[12,80],[46,86]],
+   l:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[2,9],[9,10],[10,11],[9,12]],names:{9:"角宿一 Spica",6:"太微左垣四 Vindemiatrix",2:"東上相 Porrima"}},
+  {id:"lib",zh:"天秤座",en:"Libra",story:"酸與甜的平衡，剛剛好就是最好。",
+   s:[[18,46],[28,54],[40,38],[48,8],[80,22],[84,62],[62,84],[64,94]],
+   l:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]],names:{2:"氐宿一 Zubenelgenubi",4:"氐宿四 Zubeneschamali"}},
+  {id:"sco",zh:"天蠍座",en:"Scorpio",story:"深藏心底的心意，總有一天會被點亮。",
+   s:[[76,8],[82,22],[80,34],[56,28],[36,62],[14,60],[8,72],[16,84],[34,88],[46,86]],
+   l:[[0,3],[1,3],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]],names:{3:"心宿二 Antares",9:"尾宿八 Shaula",1:"房宿三 Dschubba"}},
+  {id:"sgr",zh:"射手座",en:"Sagittarius",story:"帶一瓶可爾必思出發，旅途中的每一刻都有星光。",
+   s:[[10,64],[30,38],[44,40],[52,34],[40,22],[34,10],[62,40],[72,22],[78,50],[74,62],[64,64],[38,66],[32,88]],
+   l:[[0,1],[1,2],[2,3],[3,4],[4,5],[3,6],[6,7],[6,8],[8,9],[9,10],[1,11],[11,12]],names:{11:"箕宿三 Kaus Australis",6:"斗宿四 Nunki"}},
+  {id:"cap",zh:"摩羯座",en:"Capricorn",story:"一步一步往上爬，汗水也會變成甜的。",
+   s:[[8,52],[24,48],[42,46],[60,44],[78,34],[84,24],[64,74],[48,80]],
+   l:[[0,1],[1,2],[2,3],[3,4],[4,5],[4,6],[6,7],[7,0]],names:{5:"牛宿二 Algedi",0:"壘壁陣四 Deneb Algedi"}},
+  {id:"aqr",zh:"水瓶座",en:"Aquarius",story:"倒出一點清爽，分給身邊最重要的人。",
+   s:[[8,68],[16,34],[30,26],[44,22],[52,26],[48,50],[48,66],[60,34],[74,46],[88,58]],
+   l:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[4,7],[7,8],[8,9]],names:{3:"危宿一 Sadalmelik",2:"虛宿一 Sadalsuud"}},
+  {id:"psc",zh:"雙魚座",en:"Pisces",story:"兩條魚游向不同方向，卻被同一份酸甜繫在一起。",
+   s:[[30,6],[34,18],[26,40],[12,72],[24,62],[42,66],[60,64],[76,64],[84,60],[92,68],[84,76],[76,72]],
+   l:[[0,1],[1,2],[2,4],[4,3],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,7]],names:{3:"外屏七 Alrescha"}},
+];
+const DIPPER = {id:"dip",zh:"北斗七星",en:"Big Dipper",special:true,w:200,h:110,
+  s:[[30,22],[22,52],[56,64],[66,40],[100,54],[132,66],[178,92]],
+  l:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]],
+  starNames:["天樞","天璇","天璣","天權","玉衡","開陽","搖光"]};
+const PRIZES = ["可爾必思 5 元折價券","星座限定手機桌布","買一送一兌換券","星座限定 LINE 貼圖","可爾必思周邊抽獎","可爾必思 10 元折價券"];
+const SPARKS = ["酸甜剛剛好，就像今天的你。","這一口，讓夜空多亮了一點。","水玉落進夜空，變成了星星。","每一瓶，都讓我們更閃耀。"];
+const COLORS = ["#8fd0ff","#ffd77a","#ff9ec4","#9ef0c8","#c6a8ff","#ffb07a"];
+const FRIENDS = ["小美","阿哲","Yuki","小安","柏宇","Mia","阿凱","可可"];
+const TOTAL = ZODIAC.reduce((n,c) => n + c.s.length, 0);
+const MAX = 6;
+const LEVELS = [0,12,36,72,111];
+
+/* ======================================================
+   STORE（正式版：換成後台 API + 即時同步）
+   ====================================================== */
+const mem = {};
+const LS = {
+  get(k){ try{ const v = localStorage.getItem(k); return v === null ? (mem[k] ?? null) : JSON.parse(v); }catch(e){ return mem[k] ?? null; } },
+  set(k,v){ mem[k] = v; try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+};
+const SS = {
+  get(k){ try{ return JSON.parse(sessionStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ sessionStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+};
+const Store = {
+  room: pin => LS.get("calpis-room-"+pin),
+  save: r => LS.set("calpis-room-"+r.pin, r),
+  used: () => LS.get("calpis-used") || [],
+  markUsed: c => { const u = Store.used(); u.push(c); LS.set("calpis-used", u); },
+};
+
+/* ======================================================
+   STATE
+   ====================================================== */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const uid = () => Math.random().toString(36).slice(2,9);
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const params = new URLSearchParams(location.search);
+const invitePin = (params.get("pin") || "").replace(/\D/g,"").slice(0,6);
+const viaInvite = invitePin.length === 6;
+
+let demoDay = false, view = "all", busy = false;
+let me = SS.get("calpis-me") || (viaInvite ? null : LS.get("calpis-me")) || {id:uid(), name:"", email:"", logged:false, room:null, rooms:[]};
+let room = null;
+const saveMe = () => { SS.set("calpis-me", me); if(!viaInvite) LS.set("calpis-me", me); };
+
+function newRoom(pin){ return {pin, members:[], lit:{}, dipper:[], feed:[], done:[]}; }
+function genPin(){ let p; do{ p = String(Math.floor(100000 + Math.random()*900000)); }while(Store.room(p)); return p; }
+function addMember(r, m){
+  let x = r.members.find(y => y.id === m.id);
+  if(!x){
+    const used = r.members.map(y => y.color);
+    x = {id:m.id, name:m.name, sim:!!m.sim, color: COLORS.find(c => !used.includes(c)) || COLORS[0]};
+    r.members.push(x);
+    r.feed.unshift({by:x.id, kind:"join", at:Date.now()});
+  }else x.name = m.name;
+  return x;
+}
+function enterRoom(pin){
+  room = Store.room(pin) || newRoom(pin);
+  addMember(room, me);
+  me.room = pin;
+  if(!me.rooms.includes(pin)) me.rooms.push(pin);
+  Store.save(room); saveMe();
+}
+if(me.logged && me.room) room = Store.room(me.room);
+if(me.logged && !room) enterRoom(viaInvite ? invitePin : genPin());
+if(me.logged && viaInvite && me.room !== invitePin && !SS.get("calpis-joined-"+invitePin)){ enterRoom(invitePin); SS.set("calpis-joined-"+invitePin, 1); }
+
+addEventListener("storage", e => { if(room && e.key === "calpis-room-"+room.pin){ room = Store.room(room.pin); renderAll(); } });
+
+const member = id => (room && room.members.find(m => m.id === id)) || {name:"?", color:"#888"};
+const litOf = c => !room ? [] : c.special ? room.dipper : (room.lit[c.id] || []);
+const zodiacLit = () => ZODIAC.reduce((n,c) => n + litOf(c).length, 0);
+const myLit = () => [DIPPER, ...ZODIAC].reduce((n,c) => n + litOf(c).filter(o => o.by === me.id).length, 0);
+const byId = id => id === "dip" ? DIPPER : ZODIAC.find(c => c.id === id);
+
+/* Calpis Day: 4/7, 5/7, 6/7 */
+function isDay(){ const d = new Date(); return demoDay || (d.getDate() === 7 && CAMPAIGN.days.some(x => x.m === d.getMonth()+1)); }
+function nextDay(){
+  const d = new Date(); d.setHours(0,0,0,0);
+  const y0 = Math.max(d.getFullYear(), CAMPAIGN.year);
+  for(let y = y0; y <= y0+1; y++) for(const x of CAMPAIGN.days){ const t = new Date(y, x.m-1, 7); if(t >= d) return t; }
+}
+function stageIndex(){ const n = litOf(DIPPER).length; return n >= 7 ? 2 : n >= 3 ? 1 : 0; }
+
+/* ======================================================
+   SVG：水玉星 renderer（點亮的星＝發光的白色水玉）
+   ====================================================== */
+function rng(seed){ let a = 0; for(const ch of seed) a = (a*31 + ch.charCodeAt(0)) >>> 0; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+function starSVG(c, o = {}){
+  const W = c.w || 100, H = c.h || 100;
+  const P = c.special ? (q => q) : ([x,y]) => [16 + x*.68, 15 + y*.68];
+  const pts = c.s.map(P);
+  const lit = o.full ? c.s.map((_,i) => ({i, by:me.id})) : litOf(c);
+  const litMap = new Map(lit.map(x => [x.i, x]));
+  const gold = c.special;
+  const r = rng(c.id + (o.big ? "b" : ""));
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  if(o.medal){
+    const p = lit.length / c.s.length;
+    s += `<circle cx="50" cy="50" r="49" fill="url(#medalDim)"/><circle cx="50" cy="50" r="49" fill="url(#medal)" opacity="${(.15 + .85*p).toFixed(2)}"/>`;
+    s += `<circle cx="50" cy="50" r="48.5" fill="none" stroke="#bfe3f7" stroke-opacity=".35" stroke-width=".6"/>`;
+    s += `<circle cx="50" cy="50" r="45" fill="none" stroke="#bfe3f7" stroke-opacity=".18" stroke-width=".6" stroke-dasharray="0 2.4" stroke-linecap="round"/>`;
+  }
+  if(o.dust){
+    const n = Math.round(W*H/160);
+    for(let i=0;i<n;i++){
+      const x = r()*W, y = r()*H;
+      if(o.medal && Math.hypot(x-50,y-50) > 44) continue;
+      s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r()*.4+.15).toFixed(2)}" fill="#dff1ff" opacity="${(r()*.5+.15).toFixed(2)}"/>`;
+    }
+  }
+  c.l.forEach(([a,b]) => {
+    const [x1,y1] = pts[a], [x2,y2] = pts[b];
+    const on = litMap.has(a) && litMap.has(b);
+    const st = o.seq ? `style="animation-delay:${.6 + Math.max(a,b)*.45}s" class="seq"` : "";
+    s += on
+      ? `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#eaf7ff" stroke-width="${o.big ? 1.1 : .9}" stroke-dasharray="0 2.3" stroke-linecap="round" opacity=".95" ${st}/>`
+      : `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#bfe3f7" stroke-width=".7" stroke-dasharray="0 2.3" stroke-linecap="round" opacity=".4"/>`;
+  });
+  pts.forEach(([x,y], i) => {
+    const L = litMap.get(i);
+    if(!L){
+      s += `<circle cx="${x}" cy="${y}" r="1.5" fill="rgba(191,227,247,.15)" stroke="#bfe3f7" stroke-opacity=".7" stroke-width=".45"/>`;
+    }else if(o.filter && o.filter !== "all" && (L.by === me.id) !== (o.filter === "me")){
+      s += `<circle cx="${x}" cy="${y}" r="1.4" fill="#fff" opacity=".35"/>`;
+    }else{
+      const isNew = o.newI === i, k = (i % 3 === 0 ? 1.2 : 1) * (o.big ? 1.15 : 1);
+      const st = o.seq ? `style="animation-delay:${.3 + i*.45}s"` : "";
+      s += `<g class="${isNew ? "st-new" : ""}${o.seq ? " seq" : ""}" ${st}>`;
+      s += `<circle cx="${x}" cy="${y}" r="${7*k}" fill="url(#${gold ? "haloG" : "halo"})" class="st-halo" style="animation-delay:${(i*.43)%3}s"/>`;
+      s += `<circle cx="${x}" cy="${y}" r="${2.1*k}" fill="#fff"/>`;
+      if(o.who) s += `<circle cx="${x}" cy="${y}" r="${3.4*k}" fill="none" stroke="${member(L.by).color}" stroke-width=".55"/>`;
+      s += `</g>`;
+      if(isNew) s += `<circle cx="${x}" cy="${y}" r="2.4" class="st-ring"/>`;
+    }
+    if(o.labels && c.starNames) s += `<text x="${x + (i===1||i===6?-5:5)}" y="${i===2 ? y + 11 : y - 6}" text-anchor="${i===1||i===6?"end":"start"}" font-size="6.5" fill="#d9efff" opacity="${L ? 1 : .55}" font-family="Noto Sans TC">${c.starNames[i]}</text>`;
+  });
+  return s + `</svg>`;
+}
+
+const bottleIcon = on => `<svg viewBox="0 0 24 52"><rect x="8" y="1" width="8" height="6" rx="1.5" fill="${on ? "#fff" : "none"}" stroke="#bfe3f7" stroke-width="1"/>
+  <path d="M8 7h8v3q0 3 4 6 2 2 2 6v24q0 4-4 4H6q-4 0-4-4V22q0-4 2-6 4-3 4-6z" fill="${on ? "#fff" : "none"}" stroke="#bfe3f7" stroke-width="1.2"/>
+  ${on ? `<g fill="#5fb0f0"><circle cx="8" cy="26" r="1.6"/><circle cx="15" cy="24" r="1.6"/><circle cx="12" cy="32" r="1.6"/><circle cx="7" cy="39" r="1.6"/><circle cx="16" cy="40" r="1.6"/></g>` : ""}</svg>`;
+
+/* ======================================================
+   RENDER
+   ====================================================== */
+function renderHome(){
+  const si = stageIndex(), started = litOf(DIPPER).length > 0;
+  $("#tlHome").innerHTML = CAMPAIGN.days.map((x,i) => `<div class="${started && i === si ? "now" : ""}"><small>第 ${i+1} 階段</small><b>${x.m}/7</b><strong>${x.title}</strong><span>${x.sub}</span></div>`).join("");
+  $("#rwHome").innerHTML = `
+    <figure><div class="art">${starSVG(DIPPER,{full:true})}</div><figcaption>北斗七星完整點亮<span>專屬動畫</span></figcaption></figure>
+    <figure><div class="art"><svg viewBox="0 0 100 100"><rect x="30" y="12" width="40" height="76" rx="7" fill="#0a1f63" stroke="#bfe3f7" stroke-width="1.2"/>
+      <polyline points="40,34 48,40 57,38 62,50 54,58 46,66" fill="none" stroke="#bfe3f7" stroke-width="1" stroke-dasharray="0 2.4" stroke-linecap="round"/>
+      <g fill="#fff">${[[40,34],[48,40],[57,38],[62,50],[54,58],[46,66]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="1.8"/>`).join("")}</g>
+      <text x="50" y="24" text-anchor="middle" font-family="Cinzel" font-size="6" fill="#bfe3f7">CALPIS</text><rect x="38" y="76" width="24" height="5" rx="2.5" fill="#fff"/></svg></div><figcaption>生成紀念圖<span>分享至社群</span></figcaption></figure>
+    <figure><div class="art"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="url(#haloG)"/><path d="M50 30l6 13 14 1.6-10.5 9.6 3 14L50 61l-12.5 7.2 3-14L30 44.6 44 43z" fill="#ffe6a3" stroke="#fff" stroke-width="1"/></svg></div><figcaption>收藏限定星星<span>保留在個人星河</span></figcaption></figure>`;
+  $("#period").textContent = `活動期間：${CAMPAIGN.start} – ${CAMPAIGN.end}`;
+}
+
+function renderMap(mark = {}){
+  $("#medals").innerHTML = ZODIAC.map(c => {
+    const n = litOf(c).length, full = n === c.s.length;
+    return `<button class="medal${full ? " full" : ""}" data-c="${c.id}" aria-label="${c.zh} ${n}/${c.s.length}">
+      <div class="disc">${starSVG(c, {medal:true, dust:true, filter:view, newI: mark.c === c.id ? mark.i : undefined})}<span class="pg">${n}/${c.s.length}</span></div>
+      <b>${c.zh}</b><em>${c.en}</em></button>`;
+  }).join("");
+  if(mark.c){ const m = $(`.medal[data-c="${mark.c}"]`); m && m.classList.add("hit"); }
+  $("#mapHint").textContent = room ? `房間 ${room.pin}：我們一起點亮了 ${zodiacLit()} / ${TOTAL} 顆星` : "登入後輸入瓶蓋序號，開始點亮你的星河";
+}
+
+function renderDipper(mark = {}){
+  const n = litOf(DIPPER).length, open = isDay();
+  $("#dipTag").textContent = open ? "今日開放中" : "限時開放";
+  const nd = nextDay(), t0 = new Date(); t0.setHours(0,0,0,0);
+  const days = Math.round((nd - t0)/864e5);
+  $("#dipMap").innerHTML = starSVG(DIPPER, {dust:true, big:true, labels:true, newI: mark.c === "dip" ? mark.i : undefined}) +
+    (open ? "" : `<div class="lockcover"><div><b>北斗七星地圖・尚未開放</b><span>4・5・6 月的 7 號（可爾必思日）00:00–23:59 開放<br>下一次：${nd.getFullYear()}/${nd.getMonth()+1}/7，還有 ${days} 天</span><br><button class="chip dash" id="demoDay" style="margin-top:10px">展示用：模擬今天是 7 號</button></div></div>`);
+  $("#dipSide").innerHTML = `
+    <h3>和朋友一起集滿 7 瓶，<br>點亮北斗七星！</h3>
+    <div class="big">${n}<small> / 7</small></div>
+    <div class="bottles">${Array.from({length:7}, (_,i) => bottleIcon(i < n)).join("")}</div>
+    ${open ? `<button class="pill blue block" data-act="light">輸入序號・點亮北斗</button>` : `<a class="pill blue block" href="#me">建立房間・邀請好友</a>`}
+    <p class="meta">活動時間：4・5・6 月每月 7 號 00:00 – 23:59<br>可爾必思日當天，每組序號會額外點亮一顆北斗星，從天樞依序亮到搖光。</p>`;
+  const si = stageIndex();
+  $("#dipTl").innerHTML = CAMPAIGN.days.map((x,i) => `<div class="${n && i === si ? "now" : ""}"><b>${x.m}/7</b><strong>${x.title}</strong><span>${x.sub}</span></div>`).join("");
+  const dd = $("#demoDay"); if(dd) dd.onclick = () => { demoDay = true; renderAll(); toast("已切換為可爾必思日", "北斗七星地圖開放中"); };
+}
+
+function renderMe(){
+  const pg = $("#mePage");
+  if(!me.logged || !room){
+    pg.innerHTML = `<div class="ph"><h2>我的星河</h2></div>
+      <div class="glass login-cta"><h3>開啟你的星河之旅</h3><p>不需要設定密碼，用 Email 驗證碼就能登入。<br>登入後就能輸入序號、建立房間、和朋友一起點亮星星。</p>
+      <button class="pill" data-act="login">登入／註冊</button></div>`;
+    return;
+  }
+  const mine = myLit(), lv = LEVELS.filter(t => mine >= t).length, next = LEVELS[lv] || LEVELS[LEVELS.length-1];
+  const full = ZODIAC.filter(c => litOf(c).length === c.s.length).length;
+  const cnt = {}; [DIPPER, ...ZODIAC].forEach(c => litOf(c).forEach(o => cnt[o.by] = (cnt[o.by]||0) + 1));
+  const link = location.href.split(/[?#]/)[0] + "?pin=" + room.pin;
+  const special = room.done.filter(d => d.c === "dip");
+  const zDone = room.done.filter(d => d.c !== "dip");
+  pg.innerHTML = `
+    <div class="ph"><h2>我的星河<small>個人中心</small></h2></div>
+    <div class="megrid">
+      <div class="glass card">
+        <div class="prof"><div class="ava lg" style="background:${member(me.id).color}">${esc(me.name.slice(0,1))}</div>
+          <div style="flex:1"><b>${esc(me.name)}</b><span class="lv">Lv.${lv}</span>
+          <div class="xp"><i style="width:${Math.min(100, mine/next*100)}%"></i></div>
+          <small>收集的星星會同時發光・${mine} / ${next}</small></div></div>
+        <div class="stats">
+          <div><span>已點亮星星</span><b>${mine}<small> 顆</small></b></div>
+          <div><span>已完成星座</span><b>${full}<small> / 12</small></b></div>
+          <div><span>好友星河</span><b>${me.rooms.length}<small> 個房間</small></b></div>
+        </div>
+      </div>
+      <div class="glass card">
+        <h3>我的地圖</h3>
+        <div class="maps">
+          <a class="maprow" href="#map"><svg viewBox="0 0 64 40"><polyline points="8,30 16,22 26,26 34,14 44,18 54,8" fill="none" stroke="#bfe3f7" stroke-dasharray="0 2.5" stroke-linecap="round" stroke-width="1.2"/>${[[8,30],[16,22],[26,26],[34,14],[44,18],[54,8]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="1.8" fill="#fff"/>`).join("")}</svg>
+            <div><b>星河地圖（12 星座）</b><span>已探索 ${ZODIAC.filter(c => litOf(c).length).length} / 12</span></div><span class="tag open">開放中</span></a>
+          <a class="maprow" href="#dipper"><svg viewBox="0 0 200 110">${DIPPER.s.map(([x,y]) => `<circle cx="${x}" cy="${y}" r="6" fill="#fff"/>`).join("")}</svg>
+            <div><b>北斗七星地圖</b><span>4・5・6 月每月 7 號・${litOf(DIPPER).length}/7</span></div><span class="tag limit">限時開放</span></a>
+          <div class="maprow locked"><svg viewBox="0 0 64 40"><path d="M14 14Q32 40 50 26" fill="none" stroke="#bfe3f7" stroke-dasharray="0 2.5" stroke-linecap="round" stroke-width="1.2" opacity=".6"/><circle cx="14" cy="14" r="2.4" fill="#fff"/><circle cx="50" cy="26" r="2.4" fill="#fff"/></svg>
+            <div><b>牛郎織女地圖</b><span>七夕 7/7，敬請期待</span></div><span class="tag lock">待解鎖</span></div>
+        </div>
+      </div>
+      <div class="glass card">
+        <h3>好友組隊<span class="tag open">${room.members.length}/${MAX} 人</span></h3>
+        <div class="pin"><small>你的專屬 PIN Code</small><div class="code">${room.pin}</div>
+          <button class="pill blue sm" data-act="share" data-link="${esc(link)}">分享邀請連結</button></div>
+        <div class="members">${room.members.map(m => `<span class="mem"><span class="ava sm" style="background:${m.color}">${esc(m.name.slice(0,1))}</span>${m.id === me.id ? "你" : esc(m.name)} <b>${cnt[m.id] || 0}</b></span>`).join("")}</div>
+        <div class="row"><button class="chip" data-act="join">輸入 PIN 加入房間</button><button class="chip" data-act="newroom">建立新房間</button>
+          ${me.rooms.length > 1 ? `<button class="chip" data-act="rooms">切換房間</button>` : ""}<button class="chip dash" data-act="sim">展示用：模擬朋友點亮</button></div>
+      </div>
+      <div class="glass card">
+        <h3>紀念與收藏</h3>
+        <div class="coll">${special.map(() => `<div>${starSVG(DIPPER,{full:true})}北斗七星</div>`).join("")}${zDone.map(d => `<div>${starSVG(byId(d.c),{medal:true, full:true})}${byId(d.c).zh}</div>`).join("")}</div>
+        ${special.length || zDone.length ? "" : `<p class="empty">集滿星座或北斗七星，限定星星會收藏在這裡。</p>`}
+        <div class="row"><button class="pill sm" data-act="memorial">生成紀念圖</button></div>
+      </div>
+      <div class="glass card" style="grid-column:1/-1">
+        <h3>星河動態</h3>
+        <ul class="feed">${room.feed.slice(0,8).map(e => {
+          const m = member(e.by), c = e.c && byId(e.c);
+          const t = e.kind === "join" ? "加入了房間" : e.kind === "done" ? `集滿了 <b>${c.zh}</b> ✦` : `點亮了 <b>${c.zh}</b> 的一顆星`;
+          return `<li><i class="d" style="background:${m.color}"></i><span><b>${e.by === me.id ? "你" : esc(m.name)}</b> ${t}</span><span class="t">${ago(e.at)}</span></li>`;
+        }).join("")}</ul>
+        <div class="row"><button class="chip" data-act="rename">修改暱稱</button><button class="chip" data-act="logout">登出</button></div>
+      </div>
+    </div>`;
+}
+function ago(t){ const s = (Date.now()-t)/1000; return s < 60 ? "剛剛" : s < 3600 ? Math.floor(s/60)+" 分鐘前" : s < 86400 ? Math.floor(s/3600)+" 小時前" : Math.floor(s/86400)+" 天前"; }
+
+function renderAll(mark){ renderHome(); renderMap(mark && mark.c !== "dip" ? mark : {}); renderDipper(mark || {}); renderMe(); }
+
+/* ======================================================
+   ROUTER
+   ====================================================== */
+let heroActive = true;
+function route(){
+  let r = (location.hash || "#home").slice(1);
+  if(!["home","map","dipper","me"].includes(r)) r = "home";
+  $$(".view").forEach(v => v.classList.toggle("on", v.id === "v-"+r));
+  $$("[data-r]").forEach(a => a.classList.toggle("on", a.dataset.r === r));
+  if(r !== "home") scrollTo(0,0);
+  heroActive = r === "home";
+}
+addEventListener("hashchange", route);
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-about]"); if(!a) return;
+  e.preventDefault();
+  if((location.hash || "#home") !== "#home") location.hash = "#home";
+  setTimeout(() => $("#about").scrollIntoView({behavior:"smooth"}), 80);
+});
+
+/* ======================================================
+   SHEETS
+   ====================================================== */
+function sheet(html, cls = ""){
+  $("#sheet").className = "sheet " + cls;
+  $("#sheet").innerHTML = `<button class="x" aria-label="關閉">×</button>` + html;
+  $("#veil").classList.add("open");
+}
+function closeSheet(){ $("#veil").classList.remove("open"); }
+$("#veil").addEventListener("click", e => { if(e.target.id === "veil" || e.target.closest(".x")) closeSheet(); });
+const mk = `<div class="mark"><b>可爾必思</b><span>CALPIS</span></div>`;
+
+/* ---- login（Email 驗證碼） ---- */
+let afterLogin = null;
+function openLogin(next){
+  afterLogin = next || null;
+  sheet(`${mk}<h3>登入／註冊</h3><p class="lead">不需要設定密碼，<br>用 Email 開啟你的星河之旅。</p>
+    <input class="field" id="lgEmail" type="email" placeholder="請輸入 Email" value="${esc(me.email)}">
+    <input class="field" id="lgName" maxlength="10" placeholder="設定你的星河暱稱" value="${esc(me.name)}">
+    <button class="pill blue block" id="lgSend">寄送驗證碼</button><div class="err" id="lgErr"></div>
+    <p class="foot-s">展示原型：驗證碼會直接顯示在畫面上，不會真的寄信。</p>`);
+  $("#lgSend").onclick = () => {
+    const email = $("#lgEmail").value.trim(), name = $("#lgName").value.trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return $("#lgErr").textContent = "請輸入正確的 Email";
+    if(!name) return $("#lgErr").textContent = "幫自己取一個星河暱稱吧";
+    const code = String(Math.floor(100000 + Math.random()*900000));
+    sheet(`${mk}<h3>輸入驗證碼</h3><p class="lead">驗證碼已寄至 ${esc(email)}</p>
+      <input class="field code" id="lgCode" inputmode="numeric" maxlength="6" placeholder="••••••">
+      <button class="pill blue block" id="lgOk">驗證並登入</button><div class="err" id="lgErr"></div>
+      <p class="foot-s">展示用驗證碼：<b id="demoCode" style="color:#fff;letter-spacing:.2em">${code}</b>　<button id="lgBack">重新輸入 Email</button></p>`);
+    $("#lgBack").onclick = () => openLogin(afterLogin);
+    $("#lgOk").onclick = () => {
+      if($("#lgCode").value.trim() !== code) return $("#lgErr").textContent = "驗證碼不正確";
+      me.email = email; me.name = name; me.logged = true; saveMe();
+      enterRoom(viaInvite ? invitePin : (me.room || genPin()));
+      closeSheet(); renderAll();
+      toast(`歡迎，${name}`, viaInvite ? `已加入房間 ${invitePin}` : `你的房間 PIN：${room.pin}`);
+      const f = afterLogin; afterLogin = null; f && setTimeout(f, 50);
+    };
+  };
+}
+
+/* ---- serial input ---- */
+const CH = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+function check(s){ let t = 0; for(let i=0;i<7;i++) t += CH.indexOf(s[i]) * (i+3); return CH[t % CH.length]; }
+const norm = v => v.toUpperCase().replace(/[^A-Z0-9]/g,"");
+function makeCode(){ let s = ""; for(let i=0;i<7;i++) s += CH[Math.floor(Math.random()*CH.length)]; s += check(s); return s.slice(0,4)+"-"+s.slice(4); }
+
+function openLight(prefill = ""){
+  if(!me.logged) return openLogin(() => openLight(prefill));
+  sheet(`${mk}
+    <svg class="cap" viewBox="0 0 120 90"><ellipse cx="60" cy="72" rx="46" ry="10" fill="#040d33" opacity=".6"/><rect x="18" y="20" width="84" height="48" rx="10" fill="#f4faff"/>
+      <g stroke="#cfe4f8" stroke-width="2">${Array.from({length:10},(_,i) => `<line x1="${26+i*7.5}" y1="26" x2="${26+i*7.5}" y2="64"/>`).join("")}</g>
+      <ellipse cx="60" cy="20" rx="42" ry="9" fill="#e5f2ff"/><text x="60" y="23" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="8" fill="#1d5fd1" letter-spacing="1.5">XXXX-XXXX</text></svg>
+    <h3 class="hand">點亮一顆星</h3><p class="lead">打開瓶蓋，輸入內側的 8 碼序號。<br>星星會隨機落在 12 星座中的某一顆${isDay() ? `。<br><b style="color:#ffd77a">今天是可爾必思日，還會加碼點亮北斗七星！</b>` : "。"}</p>
+    <input class="field code" id="code" maxlength="9" placeholder="XXXX-XXXX" value="${esc(prefill)}" autocomplete="off">
+    <button class="pill blue block" id="go">點亮星星</button><div class="err" id="cErr"></div>
+    <p class="foot-s"><button id="gen">展示用：產生測試序號</button></p>`);
+  const inp = $("#code");
+  inp.addEventListener("input", () => { let v = norm(inp.value).slice(0,8); inp.value = v.length > 4 ? v.slice(0,4)+"-"+v.slice(4) : v; $("#cErr").textContent = ""; });
+  inp.addEventListener("keydown", e => { if(e.key === "Enter") submit(); });
+  $("#go").onclick = submit;
+  $("#gen").onclick = () => { inp.value = makeCode(); };
+  setTimeout(() => inp.focus(), 100);
+}
+
+function pickZodiac(){
+  const pool = [];
+  ZODIAC.forEach(c => { const s = new Set(litOf(c).map(o => o.i)); c.s.forEach((_,i) => { if(!s.has(i)) pool.push({c:c.id, i}); }); });
+  return pool.length ? pool[Math.floor(Math.random()*pool.length)] : null;
+}
+function pickDipper(){ const n = litOf(DIPPER).length; return n < 7 ? {c:"dip", i:n} : null; }
+
+function applyLight(t, by){
+  const c = byId(t.c), at = Date.now();
+  if(c.special) room.dipper.push({i:t.i, by, at});
+  else (room.lit[c.id] = room.lit[c.id] || []).push({i:t.i, by, at});
+  room.feed.unshift({by, c:c.id, kind:"lit", at});
+  if(litOf(c).length === c.s.length){
+    const d = {c:c.id, prize: c.special ? "北斗七星專屬動畫＋限定星星＋紀念圖" : PRIZES[ZODIAC.indexOf(c) % PRIZES.length],
+      code: (c.special ? "DIPPER" : c.id.toUpperCase()) + "-" + room.pin + "-" + uid().slice(0,3).toUpperCase(), at};
+    room.done.push(d);
+    room.feed.unshift({by, c:c.id, kind:"done", at:at+1});
+    return d;
+  }
+  return null;
+}
+
+async function roulette(target){
+  const ms = $$(".medal");
+  $("#medals").scrollIntoView({behavior:"smooth", block:"center"});
+  await sleep(450);
+  let prev;
+  for(let k=0;k<12;k++){
+    prev && prev.classList.remove("scan");
+    const m = k === 11 ? $(`.medal[data-c="${target}"]`) : ms[Math.floor(Math.random()*ms.length)];
+    m.classList.add("scan"); prev = m;
+    await sleep(60 + k*k*2.6);
+  }
+  await sleep(220); prev.classList.remove("scan");
+  $(`.medal[data-c="${target}"]`).scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+async function submit(){
+  const raw = norm($("#code").value), err = t => $("#cErr").textContent = t;
+  if(raw.length !== 8) return err("序號是 8 碼英數字，請再確認瓶蓋。");
+  if([...raw].some(ch => !CH.includes(ch)) || check(raw) !== raw[7]) return err("這組序號好像不太對，請檢查是否輸入正確。");
+  if(Store.used().includes(raw)) return err("這組序號已經點亮過星星了。");
+  const z = pickZodiac(), dp = isDay() ? pickDipper() : null;
+  if(!z && !dp) return err("整片星河都亮了！等下一個可爾必思日再來。");
+  if(busy) return;
+  busy = true; Store.markUsed(raw); closeSheet();
+  const wins = [];
+  if(z){
+    if(location.hash !== "#map"){ location.hash = "#map"; await sleep(120); }
+    renderMap(); await roulette(z.c);
+    const w = applyLight(z, me.id); w && wins.push(w);
+    Store.save(room); renderAll(z);
+    toast(`✦ ${byId(z.c).zh} 亮起了一顆星`, SPARKS[Math.floor(Math.random()*SPARKS.length)]);
+  }
+  if(dp){
+    await sleep(z ? 1700 : 0);
+    location.hash = "#dipper"; await sleep(500);
+    const w = applyLight(dp, me.id); w && wins.push(w);
+    Store.save(room); renderAll(dp);
+    toast(`🌟 可爾必思日加碼：${DIPPER.starNames[dp.i]}亮了`, `北斗七星 ${litOf(DIPPER).length} / 7`);
+  }
+  busy = false;
+  for(const w of wins){ await sleep(1400); await celebrate(w); }
+}
+
+async function simulate(){
+  if(busy || !room) return;
+  const fr = room.members.filter(m => m.sim);
+  let f;
+  if(room.members.length < MAX && (!fr.length || Math.random() < .35)){
+    const name = FRIENDS.find(n => !room.members.some(m => m.name === n)) || "朋友";
+    f = addMember(room, {id:uid(), name, sim:true});
+    Store.save(room); renderAll(); toast(`${name} 用 PIN Code 加入了房間`, "一起點亮星河吧！");
+    await sleep(1300);
+  }else if(fr.length) f = fr[Math.floor(Math.random()*fr.length)];
+  else return toast("房間已經滿 6 人了");
+  const z = pickZodiac(); if(!z) return toast("星河已經全亮了！");
+  busy = true;
+  location.hash = "#map"; await sleep(150); renderMap(); await roulette(z.c);
+  const w = applyLight(z, f.id); Store.save(room); renderAll(z);
+  toast(`${f.name} 點亮了 ${byId(z.c).zh} 的一顆星`, "朋友的星星，也是我們的星河");
+  busy = false;
+  if(w){ await sleep(1400); celebrate(w); }
+}
+
+/* ---- celebrate ---- */
+function celebrate(d){
+  return new Promise(res => {
+    const c = byId(d.c);
+    const ids = [...new Set(litOf(c).map(o => o.by))];
+    const whos = `<div class="whos">${ids.map(id => `<span class="mem"><span class="ava sm" style="background:${member(id).color}">${esc(member(id).name.slice(0,1))}</span>${id === me.id ? "你" : esc(member(id).name)}</span>`).join("")}</div>`;
+    if(c.special){
+      sheet(`<div style="margin-top:20px">${starSVG(DIPPER, {full:true, seq:true, big:true, labels:true, dust:true})}</div>
+        <h3 class="hand">北斗七星，完整點亮！</h3>
+        <p class="lead">七瓶可爾必思 × 朋友的力量 ＝ 完整的北斗七星</p>
+        <div class="bottles" style="justify-content:center">${Array.from({length:7}, () => bottleIcon(true)).join("")}</div>${whos}
+        <div class="prize"><b>解鎖：專屬動畫・限定星星・紀念圖</b>兌換碼<code>${d.code}</code></div>
+        <div class="row"><button class="pill blue" data-act="memorial" style="flex:1">生成紀念圖</button><button class="pill ghost" id="cOk" style="flex:1">收藏</button></div>`, "gold");
+    }else{
+      const grand = ZODIAC.every(z => litOf(z).length === z.s.length);
+      sheet(`<div class="detail-art">${starSVG(c, {medal:true, full:true, dust:true, seq:true})}</div>
+        <h3>我們一起點亮了${c.zh}</h3><p class="lead">${c.story}</p>${whos}
+        <div class="prize"><b>每位成員都獲得：${d.prize}</b>兌換碼<code>${d.code}</code></div>
+        ${grand ? `<div class="prize" style="border-color:#ffd77a"><b>🎉 12 星座全部點亮！</b>全星河大獎：可爾必思一箱＋限定星空保冷袋 抽獎資格</div>` : ""}
+        <button class="pill blue block" id="cOk" style="margin-top:14px">收進我的星河</button>`);
+    }
+    $("#cOk").onclick = () => closeSheet();
+    const obs = setInterval(() => { if(!$("#veil").classList.contains("open")){ clearInterval(obs); res(); } }, 300);
+  });
+}
+
+/* ---- constellation detail ---- */
+$("#medals").addEventListener("click", e => {
+  const b = e.target.closest(".medal"); if(!b || busy) return;
+  const c = byId(b.dataset.c), lit = litOf(c), set = new Set(lit.map(o => o.i));
+  const cnt = {}; lit.forEach(o => cnt[o.by] = (cnt[o.by]||0) + 1);
+  const done = room && room.done.find(d => d.c === c.id);
+  sheet(`<div class="detail-art" style="margin-top:10px">${starSVG(c, {medal:true, dust:true, big:true, who:true})}</div>
+    <div class="dname"><b>${c.zh}</b><em>${c.en}</em></div>
+    <ul class="starlist">${Object.entries(c.names).map(([i,n],k) => `<li class="${set.has(+i) ? "on" : ""}"><i>★</i>${n}${k === 0 ? `<span class="tag open">主星</span>` : ""}<span style="margin-left:auto;font-size:12px;color:var(--dim)">${set.has(+i) ? "已點亮" : "未點亮"}</span></li>`).join("")}</ul>
+    <p class="lead" style="text-align:left">${c.story}</p>
+    <p class="lead" style="text-align:left;margin:-6px 0 0">已點亮 ${lit.length} / ${c.s.length} 顆${Object.keys(cnt).length ? "・" + Object.entries(cnt).map(([id,n]) => `${id === me.id ? "你" : esc(member(id).name)} ${n}`).join("、") : ""}</p>
+    <div class="prize">${done ? `<b>已集滿！</b>${done.prize}<code>${done.code}</code>` : `<b>集滿回饋</b>${PRIZES[ZODIAC.indexOf(c) % PRIZES.length]}`}</div>
+    <button class="pill blue block" data-act="light" style="margin-top:14px">輸入序號，點亮星星</button>
+    <p class="foot-s">星星會隨機落下，也許下一顆就在${c.zh}。</p>`);
+});
+
+$("#viewbar").addEventListener("click", e => {
+  const b = e.target.closest("[data-v]"); if(!b) return;
+  view = b.dataset.v; $$("#viewbar [data-v]").forEach(x => x.classList.toggle("on", x === b)); renderMap();
+});
+
+/* ---- actions ---- */
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-act]"); if(!a) return;
+  const act = a.dataset.act;
+  if(act === "light"){ if(busy) return; openLight(); }
+  else if(act === "login") openLogin();
+  else if(act === "share"){ copy(a.dataset.link); toast("邀請連結已複製", `朋友也可以輸入 PIN：${room.pin}`); }
+  else if(act === "sim") simulate();
+  else if(act === "memorial") openMemorial();
+  else if(act === "logout"){ me.logged = false; saveMe(); room = null; renderAll(); toast("已登出"); }
+  else if(act === "newroom"){ enterRoom(genPin()); renderAll(); toast(`已建立新房間 ${room.pin}`, "分享 PIN Code 邀請朋友"); }
+  else if(act === "rooms"){
+    sheet(`<h3>切換房間</h3><div class="maps">${me.rooms.map(p => { const r = Store.room(p); return `<button class="maprow" data-pin="${p}"><div><b>房間 ${p}</b><span>${r ? r.members.length + " 人・" + ZODIAC.reduce((n,c) => n + ((r.lit[c.id]||[]).length), 0) + " 顆星" : ""}</span></div>${p === room.pin ? `<span class="tag open">目前</span>` : ""}</button>`; }).join("")}</div>`);
+    $$("[data-pin]").forEach(b => b.onclick = () => { enterRoom(b.dataset.pin); closeSheet(); renderAll(); toast(`已切換到房間 ${room.pin}`); });
+  }
+  else if(act === "join"){
+    sheet(`<h3>加入朋友的房間</h3><p class="lead">輸入朋友分享的 6 位數 PIN Code</p>
+      <input class="field code" id="pinIn" inputmode="numeric" maxlength="6" placeholder="000000"><button class="pill blue block" id="pinGo">加入房間</button><div class="err" id="pErr"></div>`);
+    $("#pinGo").onclick = () => {
+      const v = $("#pinIn").value.replace(/\D/g,"");
+      if(v.length !== 6) return $("#pErr").textContent = "PIN Code 是 6 位數字";
+      const r = Store.room(v);
+      if(!r) return $("#pErr").textContent = "找不到這個房間，請確認 PIN Code";
+      if(r.members.length >= MAX && !r.members.some(m => m.id === me.id)) return $("#pErr").textContent = "這個房間已經滿 6 人了";
+      enterRoom(v); closeSheet(); renderAll(); toast(`已加入房間 ${v}`, "一起點亮星河吧！");
+    };
+  }
+  else if(act === "rename"){
+    sheet(`<h3>修改暱稱</h3><input class="field" id="nm" maxlength="10" value="${esc(me.name)}"><button class="pill blue block" id="nmGo">儲存</button>`);
+    $("#nmGo").onclick = () => { const v = $("#nm").value.trim(); if(!v) return; me.name = v; saveMe(); addMember(room, me); Store.save(room); closeSheet(); renderAll(); };
+  }
+});
+
+/* ======================================================
+   紀念圖（canvas → PNG）
+   ====================================================== */
+async function openMemorial(){
+  if(!room) return;
+  try{ await document.fonts.ready; }catch(e){}
+  const W = 1080, H = 1350, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const x = cv.getContext("2d");
+  const g = x.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,"#040d33"); g.addColorStop(.55,"#14389a"); g.addColorStop(.8,"#6fb6ea"); g.addColorStop(1,"#eef7ff");
+  x.fillStyle = g; x.fillRect(0,0,W,H);
+  drawPolkaStars(x, W, H, 54, 0, rng("memo"), .8);
+  x.textAlign = "center"; x.fillStyle = "#fff"; x.shadowColor = "rgba(143,205,244,.9)"; x.shadowBlur = 24;
+  x.font = '700 84px "LXGW WenKai TC", serif'; x.fillText("屬於我們的星河", W/2, 140);
+  x.shadowBlur = 0; x.font = '400 32px "LXGW WenKai TC", serif'; x.fillStyle = "#d9efff";
+  x.fillText("每一瓶可爾必思，都讓我們變得更閃耀", W/2, 196);
+  const cell = 230, ox = (W - cell*4)/2, oy = 236;
+  ZODIAC.forEach((c, k) => {
+    const cx = ox + (k%4)*cell, cy = oy + Math.floor(k/4)*(cell+12);
+    const lit = new Set(litOf(c).map(o => o.i));
+    const P = ([px,py]) => [cx + 45 + px*1.4, cy + 30 + py*1.4];
+    x.fillStyle = "rgba(10,31,99,.5)"; x.beginPath(); x.arc(cx+cell/2, cy+cell/2-8, cell/2-12, 0, 7); x.fill();
+    x.strokeStyle = "rgba(191,227,247,.35)"; x.lineWidth = 1.5; x.stroke();
+    x.setLineDash([0,8]); x.lineCap = "round";
+    c.l.forEach(([a,b]) => { const on = lit.has(a) && lit.has(b); x.strokeStyle = on ? "rgba(234,247,255,.95)" : "rgba(191,227,247,.3)"; x.lineWidth = 3.5;
+      const [x1,y1] = P(c.s[a]), [x2,y2] = P(c.s[b]); x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke(); });
+    x.setLineDash([]);
+    c.s.forEach((s,i) => { const [px,py] = P(s);
+      if(lit.has(i)){ const rg = x.createRadialGradient(px,py,0,px,py,18); rg.addColorStop(0,"rgba(255,255,255,1)"); rg.addColorStop(.35,"rgba(143,205,244,.5)"); rg.addColorStop(1,"rgba(143,205,244,0)");
+        x.fillStyle = rg; x.beginPath(); x.arc(px,py,18,0,7); x.fill(); x.fillStyle = "#fff"; x.beginPath(); x.arc(px,py,5,0,7); x.fill(); }
+      else { x.strokeStyle = "rgba(191,227,247,.55)"; x.lineWidth = 1.5; x.beginPath(); x.arc(px,py,4,0,7); x.stroke(); } });
+    x.fillStyle = "#fff"; x.font = '700 24px "Noto Sans TC", sans-serif'; x.fillText(c.zh, cx+cell/2, cy+cell-2);
+  });
+  x.fillStyle = "#0a1f63"; x.font = '900 40px "Noto Sans TC", sans-serif';
+  x.fillText(`一起點亮 ${zodiacLit()} / ${TOTAL} 顆星・北斗 ${litOf(DIPPER).length} / 7`, W/2, 1130);
+  x.font = '500 28px "Noto Sans TC", sans-serif';
+  x.fillText(room.members.map(m => m.name).join("・"), W/2, 1180);
+  x.font = '900 36px "Noto Sans TC", sans-serif'; x.fillText("可爾必思", W/2, 1256);
+  x.font = '700 18px "Cinzel", serif'; x.fillText("C A L P I S", W/2, 1284);
+  x.font = '400 20px "Noto Sans TC", sans-serif'; x.fillStyle = "#4a6296";
+  const d = new Date(); x.fillText(`${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}・PIN ${room.pin}`, W/2, 1318);
+  let url = ""; try{ url = cv.toDataURL("image/png"); }catch(e){}
+  sheet(`<h3>我們的星河紀念圖</h3><div class="memo"><img src="${url}" alt="星河紀念圖"></div>
+    <a class="pill blue block" href="${url}" download="calpis-starry-${room.pin}.png">下載圖片，分享到社群</a>`);
+}
+
+/* 下方是整齊的可爾必思水玉，越往上越散開、越小，變成星星 */
+function drawPolkaStars(x, W, H, gap, t, rnd, from = .62){
+  for(let row = 0, y = gap/2; y < H + gap; row++, y += gap*.866){
+    for(let xx = (row % 2 ? gap/2 : 0); xx < W + gap; xx += gap){
+      const k = y / H, r0 = rnd(), r1 = rnd(), r2 = rnd(), r3 = rnd();
+      if(k >= from){
+        const p = Math.min(1, (k - from) / (1 - from));
+        const jx = (1-p)*(1-p) * (r0-.5) * gap * 1.6, jy = (1-p)*(1-p) * (r1-.5) * gap * 1.6;
+        const rad = gap * (.05 + .17 * Math.pow(p, .8));
+        x.globalAlpha = .6 + .4*p; x.fillStyle = "#ffffff";
+        x.beginPath(); x.arc(xx+jx, y+jy, rad, 0, 7); x.fill();
+      }else{
+        if(r3 < .4) continue;
+        const px = xx + (r0-.5)*gap*2.2, py = y + (r1-.5)*gap*2.2;
+        const tw = .5 + .5*Math.sin(t*1.6 + r2*20);
+        x.globalAlpha = (.3 + .6*r2) * (.5 + .5*tw); x.fillStyle = "#e8f6ff";
+        x.beginPath(); x.arc(px, py, .6 + r2*1.5*(gap/40), 0, 7); x.fill();
+      }
+    }
+  }
+  x.globalAlpha = 1;
+}
+
+/* ======================================================
+   BACKGROUND CANVASES
+   ====================================================== */
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+(function hero(){
+  const cv = $("#heroSky"), x = cv.getContext("2d"), off = document.createElement("canvas"), ox = off.getContext("2d");
+  let W, H, tw = [];
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  function build(){
+    W = cv.clientWidth; H = cv.clientHeight; if(!W) return;
+    for(const c of [cv, off]){ c.width = W*dpr; c.height = H*dpr; }
+    x.setTransform(dpr,0,0,dpr,0,0); ox.setTransform(dpr,0,0,dpr,0,0);
+    const g = ox.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,"#040d33"); g.addColorStop(.45,"#0c2a7e"); g.addColorStop(.7,"#2a64c4"); g.addColorStop(1,"#6fb6ea");
+    ox.fillStyle = g; ox.fillRect(0,0,W,H);
+    // 乳白色的銀河（Milky Way ↔ 乳酸菌飲料）
+    const r = rng("milky"), ang = -0.62, cx = W*.55, cy = H*.38, len = Math.hypot(W,H);
+    for(let i=0;i<14;i++){
+      const t = (i/13 - .5) * len, px = cx + Math.cos(ang)*t, py = cy + Math.sin(ang)*t;
+      const rg = ox.createRadialGradient(px,py,0,px,py,H*.28);
+      rg.addColorStop(0,"rgba(217,239,255,.16)"); rg.addColorStop(1,"rgba(217,239,255,0)");
+      ox.fillStyle = rg; ox.beginPath(); ox.arc(px,py,H*.28,0,7); ox.fill();
+    }
+    const n = Math.round(W*H/90);
+    for(let i=0;i<n;i++){
+      const t = (r()-.5)*len, spread = (r()+r()+r()-1.5) * H*.16;
+      const px = cx + Math.cos(ang)*t - Math.sin(ang)*spread, py = cy + Math.sin(ang)*t + Math.cos(ang)*spread;
+      ox.globalAlpha = r()*.6 + .1; ox.fillStyle = r() < .2 ? "#bfe3f7" : "#fff";
+      ox.beginPath(); ox.arc(px, py, r()*.9 + .2, 0, 7); ox.fill();
+    }
+    for(let i=0;i<W*H/2200;i++){ ox.globalAlpha = r()*.6+.2; ox.fillStyle = "#fff"; ox.beginPath(); ox.arc(r()*W, r()*H*.75, r()*1+.3, 0, 7); ox.fill(); }
+    ox.globalAlpha = 1;
+    tw = Array.from({length:70}, () => ({x:r()*W, y:r()*H*.7, s:r()*1.4+.8, p:r()*6.28, v:r()*.03+.01}));
+  }
+  function frame(){
+    if(heroActive && W){
+      x.drawImage(off, 0, 0, W, H);
+      for(const s of tw){
+        s.p += s.v; const a = .35 + .65*Math.abs(Math.sin(s.p));
+        const rg = x.createRadialGradient(s.x,s.y,0,s.x,s.y,s.s*4);
+        rg.addColorStop(0,`rgba(255,255,255,${a})`); rg.addColorStop(.3,`rgba(191,227,247,${a*.45})`); rg.addColorStop(1,"rgba(191,227,247,0)");
+        x.fillStyle = rg; x.beginPath(); x.arc(s.x,s.y,s.s*4,0,7); x.fill();
+      }
+    }else if(heroActive && !W) build();
+    if(!still) requestAnimationFrame(frame);
+  }
+  build(); addEventListener("resize", build); frame();
+})();
+(function bandLoop(){
+  let t = 0;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  function f(){
+    const cv = $("#band");
+    if(heroActive && cv.clientWidth){
+      t += .016;
+      const x = cv.getContext("2d"), W = cv.clientWidth, H = cv.clientHeight;
+      if(cv.width !== Math.round(W*dpr)){ cv.width = W*dpr; cv.height = H*dpr; }
+      x.setTransform(dpr,0,0,dpr,0,0);
+      const g = x.createLinearGradient(0,0,0,H);
+      g.addColorStop(0,"#040d33"); g.addColorStop(.4,"#1a4aa8"); g.addColorStop(.6,"#2a64c4"); g.addColorStop(.8,"#a9d8f5"); g.addColorStop(1,"#eef7ff");
+      x.fillStyle = g; x.fillRect(0,0,W,H);
+      drawPolkaStars(x, W, H, 40, t, rng("band"), .55);
+    }
+    if(!still) requestAnimationFrame(f);
+  }
+  f();
+})();
+
+/* 瓶身水玉：部分水玉會像星星一樣閃 */
+(function bottleDots(){
+  let s = ""; const r = rng("bottle");
+  for(let row=0, y=62; y<300; row++, y+=15) for(let xx = (row%2 ? 8 : 0); xx < 124; xx += 16){
+    s += `<circle cx="${xx}" cy="${y}" r="4.2" fill="#6db8ee" ${r() < .22 ? `class="dot-tw" style="animation-delay:${(r()*2.6).toFixed(2)}s"` : ""}/>`;
+  }
+  $("#bdots").innerHTML = s;
+})();
+
+/* ======================================================
+   MISC
+   ====================================================== */
+let tt;
+function toast(t, sub){ const el = $("#toast"); el.innerHTML = esc(t) + (sub ? `<small>${esc(sub)}</small>` : ""); el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2800); }
+function copy(t){ try{ navigator.clipboard.writeText(t); }catch(e){} }
+$("#reset").onclick = () => {
+  if(!confirm("確定清除所有會員、房間與星星資料？")) return;
+  try{ Object.keys(localStorage).filter(k => k.startsWith("calpis-")).forEach(k => localStorage.removeItem(k)); sessionStorage.clear(); }catch(e){}
+  location.href = location.href.split(/[?#]/)[0];
+};
+
+route(); renderAll();
+if(params.get("code")) openLight(params.get("code"));
+else if(viaInvite && !me.logged) setTimeout(() => { toast(`朋友邀請你加入房間 ${invitePin}`, "登入後就能一起點亮星河"); openLogin(); }, 600);
+</script>
+</body>
+</html>
