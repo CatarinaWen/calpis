@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>點亮星河</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Dancing+Script:wght@700&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy-0:#040d33;
   --navy-1:#0a1f63;
   --navy-2:#14389a;
   --calpis:#1d5fd1;
+  --deep:#0b2f8f;
   --sky:#8fcdf4;
   --mist:#d9efff;
   --milk:#ffffff;
@@ -33,31 +34,35 @@ button{cursor:pointer}
 a{color:inherit}
 .hand{font-family:"LXGW WenKai TC","Noto Sans TC",serif}
 .vh{position:absolute;width:0;height:0;overflow:hidden}
+[hidden]{display:none!important}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:75}
 
 /* ---------- top bar & nav ---------- */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:40;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;
-  background:linear-gradient(180deg,rgba(4,13,51,.85),rgba(4,13,51,.55));backdrop-filter:blur(10px);border-bottom:1px solid rgba(160,210,255,.1)}
+  background:linear-gradient(180deg,rgba(4,13,51,.86),rgba(4,13,51,.58));backdrop-filter:blur(10px);border-bottom:1px solid rgba(160,210,255,.1)}
 .mark{display:flex;flex-direction:column;line-height:1;text-decoration:none}
 .mark b{font-weight:900;font-size:18px;letter-spacing:.08em}
 .mark span{font-family:"Cinzel",serif;font-weight:700;font-size:10px;letter-spacing:.32em;color:var(--sky);margin-top:3px}
-.nav{display:none;gap:26px;font-size:14px}
+.nav{display:none;gap:24px;font-size:14px}
 .nav a{text-decoration:none;color:var(--dim);padding:6px 0;border-bottom:2px solid transparent}
 .nav a.on{color:var(--milk);border-color:var(--milk)}
 .top-r{display:flex;gap:10px;align-items:center}
 .iconbtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);display:grid;place-items:center}
 .iconbtn svg{width:18px;height:18px}
 .cta-top{display:none!important}
-@media (min-width:880px){.nav{display:flex}.cta-top{display:inline-flex!important}.tabbar{display:none!important}}
+@media (min-width:900px){.nav{display:flex}.cta-top{display:inline-flex!important}.tabbar{display:none!important}}
 
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;
-  padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(4,13,51,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(160,210,255,.14)}
-.tabbar a,.tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--dim);text-decoration:none;background:none;border:none;padding:4px 0}
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(4,13,51,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(160,210,255,.14)}
+.tabbar a,.tabbar button{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--dim);text-decoration:none;background:none;border:none;padding:4px 0}
 .tabbar svg{width:21px;height:21px}
 .tabbar a.on{color:var(--milk)}
 .tabbar .lightbtn{margin-top:-26px;color:var(--milk);font-weight:700}
-.tabbar .lightbtn i{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#fff,#cfe9ff);
+.tabbar .lightbtn i{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#fff,#d7ebff);
   box-shadow:0 0 0 4px var(--navy-0),0 0 24px rgba(143,205,244,.8)}
-.tabbar .lightbtn svg{width:34px;height:34px}
+.tabbar .lightbtn svg{width:30px;height:30px}
+.badge{position:absolute;top:0;left:56%;min-width:16px;height:16px;border-radius:9px;background:var(--gold);color:var(--ink);font-size:10px;font-weight:900;display:grid;place-items:center;padding:0 4px}
+.nav .badge{position:static;display:inline-grid;margin-left:4px;vertical-align:1px}
 
 /* ---------- buttons ---------- */
 .pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 26px;font-weight:700;font-size:15px;border:1.5px solid var(--milk);
@@ -67,10 +72,11 @@ a{color:inherit}
 .pill.sm{padding:8px 16px;font-size:13.5px}
 .pill.blue{background:linear-gradient(180deg,#3a7ff0,var(--calpis));color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(29,95,209,.45)}
 .pill.block{width:100%}
+.pill[disabled]{opacity:.45;pointer-events:none}
 
 /* ---------- views ---------- */
 main{padding-top:60px;padding-bottom:84px}
-@media (min-width:880px){main{padding-bottom:0}}
+@media (min-width:900px){main{padding-bottom:0}}
 .view{display:none}
 .view.on{display:block;animation:fade .4s ease}
 @keyframes fade{from{opacity:0}}
@@ -87,16 +93,16 @@ main{padding-top:60px;padding-bottom:84px}
 @media (min-width:700px){.hero h1 span{padding-left:1.2em}}
 .hero .sub{font-family:"LXGW WenKai TC",serif;font-size:clamp(17px,3.6vw,22px);color:var(--mist);margin:26px 0 0 clamp(20px,22vw,300px);line-height:1.7;letter-spacing:.06em}
 .hero .btns{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0 0 clamp(0px,18vw,250px)}
-.bottle{position:absolute;z-index:2;left:3%;bottom:5%;width:clamp(100px,17vw,215px);transform:rotate(-9deg);filter:drop-shadow(0 0 28px rgba(143,205,244,.65))}
+.bottle{position:absolute;z-index:2;left:4%;bottom:4%;width:clamp(92px,15vw,190px);transform:rotate(-8deg);filter:drop-shadow(0 0 26px rgba(143,205,244,.6)) drop-shadow(0 8px 10px rgba(0,0,0,.35))}
 .couple{position:absolute;z-index:2;right:6%;bottom:16%;width:clamp(78px,12vw,150px)}
 .dot-tw{animation:dtw 2.6s ease-in-out infinite}
-@keyframes dtw{50%{fill:#fff}}
+@keyframes dtw{50%{fill:#fff;opacity:1}}
 
 /* ---------- polka -> star band ---------- */
 .band{position:relative;height:300px}
 .band canvas{position:absolute;inset:0;width:100%;height:100%}
 .band p{position:absolute;left:0;right:0;top:30%;text-align:center;font-family:"LXGW WenKai TC",serif;font-size:clamp(18px,4.4vw,26px);padding:0 16px;
-  text-shadow:0 0 16px rgba(4,13,51,.9);letter-spacing:.06em;line-height:1.6}
+  text-shadow:0 0 16px rgba(4,13,51,.9);letter-spacing:.06em;line-height:1.6;pointer-events:none}
 .band p small{display:block;font-family:"Cinzel",serif;font-size:12px;color:var(--mist);letter-spacing:.3em;margin-top:6px}
 
 /* ---------- day (light) section ---------- */
@@ -107,16 +113,16 @@ main{padding-top:60px;padding-bottom:84px}
 .sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .sec-h h2{font-size:24px;font-weight:900;letter-spacing:.06em}
 .sec-h span{color:var(--ink-dim);font-size:14px}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px 12px;background:rgba(255,255,255,.88);border-radius:22px;padding:22px 16px;box-shadow:0 10px 30px rgba(29,95,209,.1)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:18px 12px;background:rgba(255,255,255,.9);border-radius:22px;padding:22px 16px;box-shadow:0 10px 30px rgba(29,95,209,.1)}
 .step{text-align:center}
-.step .ic{width:74px;height:74px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#ffffff,#d6ecff);box-shadow:inset 0 0 0 1px #cfe5fb}
-.step .ic svg{width:38px;height:38px}
+.step .ic{width:68px;height:68px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid #cfe2f6;box-shadow:0 0 0 6px #f1f8ff}
+.step .ic svg{width:30px;height:30px;fill:none;stroke:var(--calpis);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .step b{display:block;font-size:15px}
 .step b em{font-style:normal;color:var(--calpis);margin-right:6px;font-family:"Cinzel",serif}
 .step span{font-size:12.5px;color:var(--ink-dim);line-height:1.6}
 .grid2{display:grid;gap:16px;margin-top:22px}
-@media (min-width:880px){.grid2{grid-template-columns:1.15fr 1fr}}
-.panel-l{background:rgba(255,255,255,.88);border-radius:22px;padding:20px;box-shadow:0 10px 30px rgba(29,95,209,.1)}
+@media (min-width:900px){.grid2{grid-template-columns:1.15fr 1fr}}
+.panel-l{background:rgba(255,255,255,.9);border-radius:22px;padding:20px;box-shadow:0 10px 30px rgba(29,95,209,.1)}
 .panel-l h3{font-size:17px;font-weight:900;margin-bottom:12px}
 .tl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .tl div{border-radius:16px;padding:14px 8px;text-align:center;color:#fff;background:radial-gradient(120% 100% at 50% 0%,#1f4fb8,var(--navy-1))}
@@ -132,6 +138,13 @@ main{padding-top:60px;padding-bottom:84px}
 .rw3 .art svg{width:100%;height:100%}
 .rw3 figcaption{font-size:13px;font-weight:700;margin-top:8px;line-height:1.5}
 .rw3 figcaption span{display:block;font-weight:400;font-size:11.5px;color:var(--ink-dim)}
+.mikuji-teaser{display:grid;gap:18px;align-items:center;margin-top:22px;background:linear-gradient(135deg,#ffffff,#e4f1ff);border-radius:22px;padding:22px;box-shadow:0 10px 30px rgba(29,95,209,.12)}
+@media (min-width:760px){.mikuji-teaser{grid-template-columns:1.1fr 1fr}}
+.mikuji-teaser .kick{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.3em;color:var(--calpis)}
+.mikuji-teaser h3{font-size:26px;font-weight:900;margin:6px 0 10px;letter-spacing:.04em}
+.mikuji-teaser h3 em{font-style:normal;color:var(--calpis)}
+.mikuji-teaser p{font-size:14.5px;line-height:1.8;color:var(--ink-dim)}
+.mikuji-teaser .omikuji{width:min(320px,82vw);margin:0 auto}
 
 /* ---------- footer ---------- */
 footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26px 16px 30px}
@@ -154,16 +167,19 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
 .ph p{width:100%;color:var(--dim);font-size:14px;margin-top:6px;line-height:1.7}
 .glass{background:var(--glass);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(8px)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0 12px}
-.chip{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:999px;padding:7px 14px;font-size:13px}
+.chip{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:999px;padding:7px 14px;font-size:13px;text-decoration:none}
 .chip.on{background:var(--milk);color:var(--ink);border-color:var(--milk);font-weight:700}
 .chip.dash{border-style:dashed;color:var(--dim)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;margin-top:14px;background:rgba(4,13,51,.4)}
+.seg a{padding:7px 16px;border-radius:999px;font-size:13.5px;text-decoration:none;color:var(--dim)}
+.seg a.on{background:var(--milk);color:var(--ink);font-weight:700}
 
 .medals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 8px;padding:20px 12px}
 @media (min-width:640px){.medals{grid-template-columns:repeat(4,1fr)}}
 @media (min-width:960px){.medals{grid-template-columns:repeat(6,1fr);gap:22px 14px;padding:28px 22px}}
-.medal{background:none;border:none;text-align:center;border-radius:20px;padding:4px;transition:transform .2s}
-.medal:hover{transform:translateY(-3px)}
-.medal .disc{position:relative;aspect-ratio:1/1;border-radius:50%;transition:box-shadow .12s}
+.medal{background:none;border:none;text-align:center;border-radius:20px;padding:4px;transition:transform .25s}
+.medal .disc{position:relative;aspect-ratio:1/1;border-radius:50%;transition:box-shadow .12s,transform .25s}
+.medal:hover .disc{transform:translateY(-4px) scale(1.03);box-shadow:0 10px 30px rgba(143,205,244,.35)}
 .medal .disc svg{width:100%;height:100%;display:block}
 .medal b{display:block;font-size:14px;margin-top:6px;letter-spacing:.08em}
 .medal em{display:block;font-style:normal;font-family:"Cinzel",serif;font-size:10.5px;color:var(--dim);letter-spacing:.08em}
@@ -185,16 +201,17 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
 
 /* dipper */
 .dip{display:grid;overflow:hidden;margin-top:16px}
-@media (min-width:880px){.dip{grid-template-columns:1.6fr 1fr}}
+@media (min-width:900px){.dip{grid-template-columns:1.6fr 1fr}}
 .dip .map{position:relative;background:radial-gradient(80% 90% at 40% 50%,rgba(47,98,220,.45),transparent)}
 .dip .map svg{width:100%;display:block}
 .dip .side{padding:22px;border-top:1px solid var(--line)}
-@media (min-width:880px){.dip .side{border-top:0;border-left:1px solid var(--line)}}
+@media (min-width:900px){.dip .side{border-top:0;border-left:1px solid var(--line)}}
 .dip .side h3{font-family:"LXGW WenKai TC",serif;font-size:22px;line-height:1.5}
 .dip .big{font-family:"Cinzel",serif;font-size:42px;font-weight:700;margin:10px 0}
 .dip .big small{font-size:22px;color:var(--dim)}
 .bottles{display:flex;gap:6px;margin-bottom:18px}
-.bottles svg{width:24px;height:52px}
+.bottles svg{width:22px;height:62px}
+.bottles svg.off{opacity:.28;filter:grayscale(1)}
 .lockcover{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:rgba(4,13,51,.55);backdrop-filter:blur(2px);padding:20px}
 .lockcover b{font-size:18px;display:block;margin-bottom:4px}
 .lockcover span{font-size:13.5px;color:var(--dim);line-height:1.7}
@@ -209,10 +226,78 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
 .dtl strong{font-size:13.5px;display:block;letter-spacing:.08em}
 .dtl span{font-size:11px;color:var(--dim)}
 .meta{font-size:12px;color:var(--dim);margin-top:12px;line-height:1.7}
+.story-card{margin-top:16px;padding:18px 20px}
+.story-card h3{font-family:"LXGW WenKai TC",serif;font-size:20px;margin-bottom:8px}
+.story-card p{font-size:14px;line-height:1.9;color:var(--mist)}
+
+/* ---------- 水籤 omikuji card ---------- */
+.omikuji{position:relative;aspect-ratio:400/380;container-type:inline-size;user-select:none;-webkit-user-select:none}
+.omikuji .omk-art{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 10px 18px rgba(10,31,99,.28));transition:filter 1.8s ease}
+.omk-txt{position:absolute;inset:0;color:#173f9a;text-align:center}
+.omk-txt > *{position:absolute;left:50%;transform:translateX(-50%)}
+.omk-ic{top:8.5%;width:7.4cqw;height:7.4cqw}
+.omk-ic svg{width:100%;height:100%;fill:none;stroke:#fff;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.omk-cat{top:17.6%;font-size:4.5cqw;font-weight:900;color:#fff;letter-spacing:.14em;white-space:nowrap}
+.omk-stars{top:24.6%;font-size:3.6cqw;color:#fff;letter-spacing:.18em;white-space:nowrap}
+.omk-no{top:31%;font-size:2.6cqw;color:#cfe4fb;letter-spacing:.2em;white-space:nowrap;font-family:"Cinzel",serif}
+.omk-title{top:37.2%;width:84%;font-size:6.4cqw;font-weight:900;color:#0e3aa8;letter-spacing:.08em;white-space:nowrap}
+.omk-hr{top:48.6%;width:54%;height:0;border-top:.5cqw solid #1d5fd1;opacity:.55}
+.omk-body{top:51.4%;width:56%;font-size:3.7cqw;font-weight:700;line-height:1.55;color:#1d3f8f}
+.omk-pill{top:67%;font-size:3.1cqw;font-weight:700;color:#fff;background:#0e3aa8;border-radius:99px;padding:.6cqw 3.6cqw;white-space:nowrap}
+.omk-rm{top:73.4%;width:50%;font-size:3.1cqw;line-height:1.5;color:#1d3f8f;font-weight:500}
+.omk-blank{position:absolute;inset:0;width:100%;height:100%;opacity:0;pointer-events:none}
+.omikuji.blank .omk-blank{opacity:1}
+.omikuji.wet .omk-blank{opacity:.9;transition:opacity .4s}
+.omikuji.reveal .omk-blank{animation:soak 2s ease forwards}
+@keyframes soak{0%{opacity:.9;clip-path:inset(0 0 0 0)}100%{opacity:0;clip-path:inset(0 0 100% 0)}}
+.omikuji.blank .omk-txt{opacity:0}
+.omikuji.blank::after{content:"水 籤";position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font-family:"LXGW WenKai TC",serif;font-size:9cqw;letter-spacing:.3em;color:rgba(29,95,209,.22);pointer-events:none}
+.omikuji.reveal .omk-art{filter:drop-shadow(0 10px 18px rgba(10,31,99,.28))}
+.omikuji.reveal .omk-txt{animation:ink 2s ease forwards}
+.omikuji.reveal::after{opacity:0;transition:opacity .6s}
+@keyframes ink{0%{clip-path:inset(100% 0 0 0);filter:blur(5px);opacity:.3}60%{filter:blur(1.5px)}100%{clip-path:inset(0 0 0 0);filter:blur(0);opacity:1}}
+
+/* pond */
+.mk-top{display:grid;gap:12px;margin-top:14px}
+@media (min-width:900px){.mk-top{grid-template-columns:1fr 340px;align-items:start}}
+.pond{position:relative;height:620px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,rgba(15,44,133,.55),rgba(4,13,51,.25) 45%,transparent 46%)}
+.pond canvas{position:absolute;left:0;right:0;bottom:0;width:100%;height:46%}
+.pond .paper{position:absolute;left:50%;top:22px;width:min(320px,80%);margin-left:calc(min(320px,80%) / -2);touch-action:none;cursor:grab;will-change:transform;z-index:2}
+.pond .paper.hide{opacity:0;transform:translateY(-30px) scale(.8);pointer-events:none}
+.pond .paper.anim{transition:transform .8s cubic-bezier(.3,.8,.3,1),opacity .5s}
+.pond .paper.dragging{cursor:grabbing}
+.pond .drawbox{position:absolute;left:0;right:0;top:7%;text-align:center;z-index:3;padding:0 16px}
+.pond .drawbox p{font-family:"LXGW WenKai TC",serif;font-size:20px;margin-bottom:6px}
+.pond .drawbox small{display:block;color:var(--dim);font-size:13px;margin-bottom:18px;line-height:1.6}
+.tube{width:84px;margin:0 auto 14px;display:block;filter:drop-shadow(0 0 18px rgba(143,205,244,.5))}
+.tube.shake{animation:shake .7s ease}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(5deg)}}
+.pond .tip{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-size:13px;color:#eaf6ff;z-index:3;text-shadow:0 1px 6px rgba(4,13,51,.8)}
+.pond .dipbtn{position:absolute;left:50%;transform:translateX(-50%);bottom:44px;z-index:3}
+.pond .after{position:absolute;left:0;right:0;bottom:18px;z-index:3;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 12px}
+.mk-side{display:grid;gap:12px}
+.theme-card{padding:16px}
+.theme-card .now{display:flex;align-items:center;gap:10px}
+.theme-card .now b{font-size:20px;letter-spacing:.08em}
+.theme-card p{font-size:13px;color:var(--dim);line-height:1.7;margin-top:6px}
+.cal{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.cal span{font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--dim)}
+.cal span.on{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:700}
+.quota{padding:16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.quota b{font-size:22px;font-weight:900}
+.quota span{display:block;font-size:12px;color:var(--dim)}
+.bag{padding:16px}
+.bag h3{font-size:15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.bag ul{display:grid;gap:8px}
+.bag li{list-style:none;display:flex;gap:10px;align-items:center;font-size:13px;border:1px solid var(--line);border-radius:14px;padding:8px 10px;background:rgba(255,255,255,.04);cursor:pointer}
+.bag li .s{color:var(--gold);letter-spacing:.1em;font-size:11px}
+.bag li b{font-weight:700}
+.bag li .who{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:900;color:var(--ink)}
+.bag li .t{margin-left:auto;font-size:11px;color:var(--dim);flex:none}
 
 /* me */
 .megrid{display:grid;gap:14px;margin-top:16px}
-@media (min-width:880px){.megrid{grid-template-columns:1fr 1fr}}
+@media (min-width:900px){.megrid{grid-template-columns:1fr 1fr}}
 .card{padding:18px}
 .card h3{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
 .prof{display:flex;gap:14px;align-items:center}
@@ -265,10 +350,12 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
 @media (min-width:700px){.sheet{border-radius:26px;border-bottom:1px solid var(--line)}}
 .sheet.gold{background:radial-gradient(120% 70% at 50% 0%,#6b5212,var(--navy-1) 55%,var(--navy-0))}
 @keyframes up{from{transform:translateY(50px);opacity:0}}
-.x{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.08);font-size:18px;line-height:1}
+.x{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.08);font-size:18px;line-height:1;z-index:2}
 .sheet h3{font-size:22px;font-weight:900;text-align:center;margin:14px 0 6px;letter-spacing:.06em}
 .sheet h3.hand{font-weight:700;font-size:26px}
 .sheet .lead{text-align:center;color:var(--dim);font-size:13.5px;line-height:1.7;margin-bottom:16px}
+.sheet .story{font-size:14px;line-height:1.9;color:var(--mist);margin:6px 0 4px;text-align:left}
+.sheet h4{font-family:"LXGW WenKai TC",serif;font-size:18px;margin-top:14px}
 .field{width:100%;padding:13px 18px;border-radius:999px;border:1px solid rgba(160,210,255,.4);background:rgba(4,13,51,.45);color:var(--milk);outline:none;font-size:15px;margin-bottom:10px}
 .field:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(143,205,244,.25)}
 .field::placeholder{color:rgba(217,239,255,.4)}
@@ -277,7 +364,7 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
 .sheet .foot-s button{background:none;border:none;color:var(--sky);text-decoration:underline;font-size:12.5px}
 .err{color:#ffb3c7;font-size:13px;text-align:center;min-height:20px;margin-top:4px}
 .cap{width:120px;margin:0 auto;display:block}
-.detail-art{width:min(300px,80%);margin:0 auto;display:block}
+.detail-art{width:min(280px,76%);margin:0 auto;display:block}
 .dname{display:flex;align-items:baseline;gap:10px;justify-content:center;margin-top:6px}
 .dname b{font-size:28px;letter-spacing:.14em}
 .dname em{font-style:normal;font-family:"Cinzel",serif;color:var(--sky);letter-spacing:.1em}
@@ -301,33 +388,42 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
 </head>
 <body>
 
-<svg class="vh" aria-hidden="true"><defs>
+<svg class="vh" aria-hidden="true"><defs id="gdefs">
   <radialGradient id="halo"><stop offset="0" stop-color="#fff"/><stop offset=".22" stop-color="#e8f6ff" stop-opacity=".95"/><stop offset=".45" stop-color="#8fcdf4" stop-opacity=".45"/><stop offset="1" stop-color="#5aa8ff" stop-opacity="0"/></radialGradient>
   <radialGradient id="haloG"><stop offset="0" stop-color="#fff"/><stop offset=".22" stop-color="#fff3cf" stop-opacity=".95"/><stop offset=".45" stop-color="#ffd77a" stop-opacity=".45"/><stop offset="1" stop-color="#ffb84a" stop-opacity="0"/></radialGradient>
   <radialGradient id="medal" cx=".5" cy=".42"><stop offset="0" stop-color="#3b78e6"/><stop offset=".5" stop-color="#173f9e"/><stop offset="1" stop-color="#0a1f63"/></radialGradient>
   <radialGradient id="medalDim" cx=".5" cy=".42"><stop offset="0" stop-color="#1d4396"/><stop offset=".6" stop-color="#0f2a72"/><stop offset="1" stop-color="#081a52"/></radialGradient>
-  <linearGradient id="btl" x1="0" x2="1"><stop offset="0" stop-color="#dfeeff"/><stop offset=".45" stop-color="#ffffff"/><stop offset="1" stop-color="#c9e2fb"/></linearGradient>
+  <!-- bottle -->
+  <linearGradient id="btBody" x1="0" x2="1"><stop offset="0" stop-color="#d9e1ea"/><stop offset=".18" stop-color="#f4f7fa"/><stop offset=".38" stop-color="#ffffff"/><stop offset=".72" stop-color="#f1f4f8"/><stop offset="1" stop-color="#c9d3df"/></linearGradient>
+  <linearGradient id="btCap" x1="0" x2="1"><stop offset="0" stop-color="#d7dee7"/><stop offset=".4" stop-color="#ffffff"/><stop offset="1" stop-color="#cdd6e1"/></linearGradient>
+  <linearGradient id="btBand" x1="0" x2="1" y1="0" y2=".4"><stop offset="0" stop-color="#0f47b8"/><stop offset=".55" stop-color="#2b78e0"/><stop offset="1" stop-color="#7cc0f2"/></linearGradient>
+  <clipPath id="btClip"><path d="M42 41 L78 41 L78 58 C78 72 106 82 106 112 L106 316 Q106 332 90 332 L30 332 Q14 332 14 316 L14 112 C14 82 42 72 42 58 Z"/></clipPath>
+  <!-- omikuji -->
+  <linearGradient id="omkBlue" gradientUnits="userSpaceOnUse" x1="0" y1="10" x2="0" y2="370"><stop offset="0" stop-color="#0b2f8f"/><stop offset=".3" stop-color="#1d5fd1"/><stop offset=".52" stop-color="#9fccf4"/><stop offset="1" stop-color="#e2effd"/></linearGradient>
+  <linearGradient id="omkPanel" gradientUnits="userSpaceOnUse" x1="0" y1="125" x2="0" y2="370"><stop offset="0" stop-color="#ffffff"/><stop offset=".62" stop-color="#f4f9ff"/><stop offset="1" stop-color="#d6e8fb"/></linearGradient>
 </defs></svg>
+<canvas id="fx"></canvas>
 
 <header class="topbar">
   <a class="mark" href="#home"><b>可爾必思</b><span>CALPIS</span></a>
   <nav class="nav">
     <a href="#home" data-r="home">首頁</a>
     <a href="#map" data-r="map">星河地圖</a>
-    <a href="#dipper" data-r="dipper">北斗七星地圖</a>
+    <a href="#dipper" data-r="dipper">北斗七星</a>
+    <a href="#mikuji" data-r="mikuji">水籤<span class="badge" data-badge hidden></span></a>
     <a href="#me" data-r="me">我的星河</a>
     <a href="#home" data-about>活動說明</a>
   </nav>
   <div class="top-r">
     <button class="pill sm cta-top" data-act="light">輸入序號點亮</button>
-    <a class="iconbtn" href="#me" aria-label="我的星河"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></a>
+    <a class="iconbtn" href="#me" aria-label="我的星河"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></a>
   </div>
 </header>
 
 <main>
   <!-- ============ HOME ============ -->
   <section class="view" id="v-home">
-    <div class="hero">
+    <div class="hero" id="hero">
       <canvas id="heroSky"></canvas>
       <svg class="scene" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
         <defs>
@@ -353,22 +449,11 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
           <path d="M60 52q10-6 22 0" stroke="#030a2a" stroke-width="6" fill="none"/>
         </g>
       </svg>
-      <svg class="bottle" viewBox="0 0 120 300" aria-label="水玉星空瓶">
-        <defs><clipPath id="bclip"><path d="M44 46h32v10q0 10 12 22q20 20 20 46v146q0 18-18 18H30q-18 0-18-18V124q0-26 20-46q12-12 12-22z"/></clipPath></defs>
-        <rect x="40" y="10" width="40" height="34" rx="5" fill="#f4faff"/>
-        <g stroke="#cfe4f8" stroke-width="1.4"><line x1="46" y1="12" x2="46" y2="42"/><line x1="53" y1="12" x2="53" y2="42"/><line x1="60" y1="12" x2="60" y2="42"/><line x1="67" y1="12" x2="67" y2="42"/><line x1="74" y1="12" x2="74" y2="42"/></g>
-        <path d="M44 46h32v10q0 10 12 22q20 20 20 46v146q0 18-18 18H30q-18 0-18-18V124q0-26 20-46q12-12 12-22z" fill="url(#btl)"/>
-        <g clip-path="url(#bclip)" id="bdots"></g>
-        <g transform="rotate(-18 60 170)">
-          <rect x="10" y="150" width="100" height="46" rx="8" fill="#fff" opacity=".92"/>
-          <text x="60" y="174" text-anchor="middle" font-family="Cinzel,serif" font-weight="700" font-size="24" fill="#1d5fd1" letter-spacing="1">CALPIS</text>
-          <text x="60" y="190" text-anchor="middle" font-family="Noto Sans TC,sans-serif" font-weight="900" font-size="11" fill="#1d5fd1" letter-spacing="2">可爾必思</text>
-        </g>
-      </svg>
+      <svg class="bottle" id="heroBottle" viewBox="0 0 120 340" aria-label="可爾必思 Water 水語"></svg>
       <div class="hero-copy">
         <h1>一起點亮<span>屬於我們的星河</span></h1>
         <p class="sub">每一瓶可爾必思，<br>都是點亮星星的機會。</p>
-        <div class="btns"><a class="pill" href="#map">進入星河地圖</a><a class="pill ghost" href="#home" data-about>了解活動</a></div>
+        <div class="btns"><a class="pill" href="#map">進入星河地圖</a><a class="pill ghost" href="#mikuji">抽一張水籤</a></div>
       </div>
     </div>
 
@@ -379,14 +464,26 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
 
     <div class="daysec" id="about">
       <div class="page">
-        <div class="sec-h"><h2>參與方式</h2><span>5 步驟，點亮你的星河</span></div>
+        <div class="sec-h"><h2>參與方式</h2><span>喝一瓶，點一顆星，抽一張籤</span></div>
         <div class="steps">
-          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="none" stroke="#1d5fd1" stroke-width="2.2" stroke-linecap="round"><circle cx="15" cy="13" r="6"/><path d="M4 32c1-6 6-9 11-9 3 0 5 1 7 2"/><rect x="22" y="24" width="14" height="10" rx="2"/><path d="M22 25l7 5 7-5"/></svg></div><b><em>1</em>進入網站</b><span>登入／註冊<br>（Email 驗證碼）</span></div>
-          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="none" stroke="#1d5fd1" stroke-width="2.2"><circle cx="20" cy="20" r="14"/><rect x="13" y="13" width="5" height="5"/><rect x="22" y="13" width="5" height="5"/><rect x="13" y="22" width="5" height="5"/><path d="M22 22h2v2M27 25v2h-3"/></svg></div><b><em>2</em>掃描瓶身</b><span>掃瓶身 QR Code<br>輸入瓶蓋序號</span></div>
-          <div class="step"><div class="ic"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#1d5fd1"/><path d="M20 10l3 6.5 7 .8-5.2 4.8 1.5 7L20 25.6 13.7 29l1.5-7L10 17.3l7-.8z" fill="#ffd77a"/></svg></div><b><em>3</em>點亮星星</b><span>星星隨機落下<br>收藏到你的星河</span></div>
-          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="#1d5fd1"><circle cx="20" cy="13" r="5"/><circle cx="9" cy="16" r="4"/><circle cx="31" cy="16" r="4"/><path d="M11 32c0-6 4-10 9-10s9 4 9 10z"/><path d="M2 30c0-5 3-8 7-8 2 0 3 .5 4 1.5-2 2-3 4-3.5 6.5zM38 30c0-5-3-8-7-8-2 0-3 .5-4 1.5 2 2 3 4 3.5 6.5z"/></svg></div><b><em>4</em>邀請朋友</b><span>分享 PIN Code<br>一起集星</span></div>
-          <div class="step"><div class="ic"><svg viewBox="0 0 40 40" fill="none" stroke="#1d5fd1" stroke-width="2.2"><rect x="7" y="9" width="26" height="22" rx="3"/><circle cx="15" cy="16" r="2.5"/><path d="M8 28l8-7 5 4 5-5 7 7"/></svg></div><b><em>5</em>完成任務</b><span>解鎖限定地圖<br>生成紀念圖</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 19c.6-3.6 3-5.5 6-5.5 1.4 0 2.6.4 3.6 1.1"/><rect x="13.5" y="14" width="8" height="6" rx="1"/><path d="M13.5 14.5l4 3 4-3"/></svg></div><b><em>1</em>進入網站</b><span>登入／註冊<br>（Email 驗證碼）</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><rect x="8" y="8" width="3" height="3"/><rect x="13" y="8" width="3" height="3"/><rect x="8" y="13" width="3" height="3"/><path d="M13 13h3v3"/></svg></div><b><em>2</em>掃描瓶身</b><span>掃瓶身 QR Code<br>輸入瓶蓋序號</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3c.6 4.8 2.2 6.4 7 7-4.8.6-6.4 2.2-7 7-.6-4.8-2.2-6.4-7-7 4.8-.6 6.4-2.2 7-7z"/><path d="M19 16.5c.2 1.4.7 1.9 2 2-1.3.2-1.8.7-2 2-.2-1.3-.7-1.8-2-2 1.3-.1 1.8-.6 2-2z"/></svg></div><b><em>3</em>點亮星星</b><span>星星隨機落下<br>收藏到你的星河</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.2 4.6 5 .6-3.7 3.4 1 5-4.5-2.5-4.5 2.5 1-5L4.8 8.7l5-.6z"/><path d="M4 20.5c2.7-1.3 5.3-1.3 8 0s5.3 1.3 8 0"/></svg></div><b><em>4</em>抽一張水籤</b><span>放進水裡看籤詩<br>把壓力交給水語</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3 19c.5-3.4 2.7-5.2 5.5-5.2s5 1.8 5.5 5.2M14 14.2c.6-.3 1.3-.4 2-.4 2.4 0 4.2 1.6 4.6 4.6"/></svg></div><b><em>5</em>邀請朋友</b><span>分享 PIN Code<br>一起集星、比籤運</span></div>
+          <div class="step"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M5 17l4.5-4 3 2.5 3-3 3.5 3.5"/></svg></div><b><em>6</em>完成任務</b><span>解鎖限定地圖<br>生成紀念圖分享</span></div>
         </div>
+
+        <div class="mikuji-teaser">
+          <div>
+            <div class="kick">MIZU-MIKUJI · 水籤</div>
+            <h3>將壓力交給<em>「水語」</em></h3>
+            <p>日本神社有一種「水籤」：白紙放進水裡，籤詩才會慢慢浮現。<br>考試、報告、朋友之間的小事……壓力大的時候，喝一口可爾必思水語，抽一張籤，看看今天的你會遇見什麼。每一波還會依照學校行事曆推出新主題：期中籤、期末籤、友情籤、畢業籤。</p>
+            <div class="row" style="margin-top:16px"><a class="pill blue" href="#mikuji">去抽水籤</a></div>
+          </div>
+          <div id="teaserCard"></div>
+        </div>
+
         <div class="grid2">
           <div class="panel-l">
             <h3>4・5・6 月　每月 7 號限定</h3>
@@ -407,7 +504,8 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
     <div class="page">
       <div class="ph"><h2>星河地圖<small>12 星座精選亮星</small></h2>
         <button class="pill sm" data-act="light">輸入序號點亮</button>
-        <p>輸入瓶蓋序號後，星星會<b>隨機</b>落在其中一個星座。點星座可以看它的亮星與故事。</p></div>
+        <p>輸入瓶蓋序號後，星星會<b>隨機</b>落在其中一個星座。點星座可以讀它的故事、看它的亮星。</p></div>
+      <div class="seg"><a href="#map" class="on">12 星座</a><a href="#dipper">北斗七星（限時）</a></div>
       <div class="chips" id="viewbar">
         <button class="chip on" data-v="all">全部星星</button>
         <button class="chip" data-v="me">我點亮的</button>
@@ -422,11 +520,37 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
   <section class="view nightbg" id="v-dipper">
     <div class="page">
       <div class="ph"><h2>北斗七星地圖<small>4・5・6 月　每月 7 號限定開放</small></h2><span class="tag limit" id="dipTag"></span></div>
+      <div class="seg"><a href="#map">12 星座</a><a href="#dipper" class="on">北斗七星（限時）</a></div>
       <div class="glass dip">
         <div class="map" id="dipMap"></div>
         <div class="side" id="dipSide"></div>
       </div>
       <div class="dtl" id="dipTl"></div>
+      <div class="glass story-card"><h3>北斗七星的故事</h3><p id="dipStory"></p></div>
+    </div>
+  </section>
+
+  <!-- ============ MIKUJI ============ -->
+  <section class="view nightbg" id="v-mikuji">
+    <div class="page">
+      <div class="ph"><h2>水籤<small>將壓力交給「水語」</small></h2>
+        <p>把白色的籤紙放進水裡，籤詩就會慢慢浮現。抽到什麼都沒關係，喝一口，深呼吸，今天也辛苦了。</p></div>
+      <div class="mk-top">
+        <div class="pond" id="pond">
+          <canvas id="water"></canvas>
+          <div class="drawbox" id="drawbox"></div>
+          <div class="paper hide" id="paper"></div>
+          <button class="pill dipbtn" id="dipBtn" hidden>放入水中</button>
+          <p class="tip" id="pondTip">輕點水面，也會有漣漪</p>
+          <div class="after" id="after" hidden></div>
+        </div>
+        <div class="mk-side">
+          <div class="glass theme-card" id="themeCard"></div>
+          <div class="glass quota" id="quota"></div>
+          <div class="glass bag" id="friendsBag"></div>
+          <div class="glass bag" id="myBag"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -441,17 +565,17 @@ footer{background:linear-gradient(180deg,var(--navy-1),var(--navy-0));padding:26
     <small id="period"></small>
     <div class="mark"><b>可爾必思</b><span>CALPIS</span></div>
     <div class="hand">一瓶可爾必思，點亮一顆星。</div>
-    <p class="note">本頁為活動概念原型：會員、房間與星星資料目前存在本機瀏覽器（同一台裝置用邀請連結開新分頁可模擬朋友），正式上線需串接後台做 Email 驗證、序號驗證、即時同步與兌獎。
+    <p class="note">本頁為活動概念原型：會員、房間、星星與水籤資料目前存在本機瀏覽器（同一台裝置用邀請連結開新分頁可模擬朋友），正式上線需串接後台做 Email 驗證、序號驗證、即時同步與兌獎。
       <button id="reset">清除所有資料（測試用）</button></p>
   </div>
 </footer>
 
 <nav class="tabbar">
-  <a href="#home" data-r="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg>首頁</a>
-  <a href="#map" data-r="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>星河地圖</a>
-  <button class="lightbtn" data-act="light"><i><svg viewBox="0 0 40 40"><rect x="15" y="3" width="10" height="6" rx="1.5" fill="#1d5fd1"/><path d="M15 9h10v3q0 3 4 6 3 3 3 7v10q0 3-3 3H11q-3 0-3-3V25q0-4 3-7 4-3 4-6z" fill="#fff" stroke="#1d5fd1" stroke-width="1.6"/><g fill="#5fb0f0"><circle cx="14" cy="24" r="1.6"/><circle cx="20" cy="21" r="1.6"/><circle cx="26" cy="25" r="1.6"/><circle cx="17" cy="30" r="1.6"/><circle cx="24" cy="32" r="1.6"/></g></svg></i>點亮</button>
-  <a href="#dipper" data-r="dipper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="4" cy="6" r="1.5"/><circle cx="8" cy="9" r="1.5"/><circle cx="12" cy="10" r="1.5"/><circle cx="15" cy="13" r="1.5"/><circle cx="15" cy="19" r="1.5"/><circle cx="21" cy="19" r="1.5"/><circle cx="21" cy="13" r="1.5"/><path d="M5.3 6.8l1.4 1.4M9.5 9.3l1 .4M13.2 11l1 1M15 14.5v3M16.5 19h3M21 17.5v-3M19.5 13h-3"/></svg>北斗七星</a>
-  <a href="#me" data-r="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>我的星河</a>
+  <a href="#home" data-r="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>首頁</a>
+  <a href="#map" data-r="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>星河地圖</a>
+  <button class="lightbtn" data-act="light"><i><svg viewBox="0 0 24 40" fill="none" stroke="#1d5fd1" stroke-width="1.6" stroke-linejoin="round"><rect x="8" y="2" width="8" height="5" rx="1"/><path d="M8.5 7h7v2.5c0 1.6 4.5 3 4.5 7V35a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 35V16.5c0-4 4.5-5.4 4.5-7z"/><path d="M4 18c3-1.6 5.5-1.6 8 0s5 1.6 8 0" /><circle cx="9" cy="24" r="1" fill="#1d5fd1"/><circle cx="15" cy="27" r="1.4" fill="#1d5fd1"/><circle cx="10.5" cy="31" r="1.2" fill="#1d5fd1"/></svg></i>點亮</button>
+  <a href="#mikuji" data-r="mikuji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l2.1 4.4 4.8.6-3.5 3.3.9 4.8L12 13.8l-4.3 2.3.9-4.8L5.1 8l4.8-.6z"/><path d="M3 20c3-1.5 6-1.5 9 0s6 1.5 9 0"/></svg>水籤<span class="badge" data-badge hidden></span></a>
+  <a href="#me" data-r="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>我的星河</a>
 </nav>
 
 <div class="veil" id="veil"><div class="sheet" id="sheet"></div></div>
@@ -470,42 +594,55 @@ const CAMPAIGN = {
   ],
 };
 const ZODIAC = [
-  {id:"ari",zh:"牡羊座",en:"Aries",story:"衝第一的勇氣，就像第一口的酸，讓人瞬間清醒。",
+  {id:"ari",zh:"牡羊座",en:"Aries",tagline:"衝第一的勇氣",
+   story:"希臘神話裡，一隻金色的公羊載著佛里克索斯和赫勒兩兄妹逃離危險，飛越大海。途中妹妹不小心滑落海裡，公羊沒有停下——因為牠知道，前方還有要守護的人。後來牠被放上夜空，成了牡羊座。就像每個新學期的第一天：有點緊張、有點酸，但只要往前衝，總會遇見甜的那一刻。",
    s:[[12,20],[22,28],[66,52],[84,70],[86,84]],l:[[0,1],[1,2],[2,3],[3,4]],names:{2:"婁宿三 Hamal",1:"婁宿一 Sheratan",0:"婁宿二 Mesarthim"}},
-  {id:"tau",zh:"金牛座",en:"Taurus",story:"慢慢品味，甜才會在舌尖停留得更久。",
+  {id:"tau",zh:"金牛座",en:"Taurus",tagline:"靠在一起的七姊妹",
+   story:"金牛座的肩上，有一團小小的星星——昴宿星團，傳說中的「七姊妹」。她們被獵人追趕了好多年，卻從來沒有放開彼此的手。宙斯把她們藏進金牛座，讓她們永遠靠在一起發光。好朋友就是這樣：不一定最亮，但一定一起。",
    s:[[8,14],[36,34],[44,48],[40,58],[56,60],[66,62],[86,58],[90,72],[58,78],[64,90],[4,40]],
    l:[[0,1],[1,2],[2,3],[2,4],[4,5],[5,6],[6,7],[5,8],[8,9],[10,3]],names:{3:"畢宿五 Aldebaran",0:"五車五 Elnath",6:"昴宿星團 Pleiades"}},
-  {id:"gem",zh:"雙子座",en:"Gemini",story:"雙子座的主星北河三（Pollux）和北河二（Castor），是夜空中最明亮的一對兄弟星，象徵雙生與陪伴。",
+  {id:"gem",zh:"雙子座",en:"Gemini",tagline:"分你一半的永恆",
+   story:"卡斯托和波魯克斯是一對雙胞胎，一個是凡人，一個擁有永生。哥哥在戰鬥中倒下後，弟弟向宙斯請求：把我的永生分一半給他。從此兩人一天在天上、一天在人間，再也不分開。北河二和北河三並肩閃耀，就像那個陪你熬夜複習、把半瓶飲料分給你的朋友。",
    s:[[22,8],[8,22],[40,62],[58,82],[56,44],[80,58],[92,60],[72,86]],
    l:[[0,1],[1,2],[2,3],[0,4],[4,5],[5,6],[5,7],[3,7]],names:{1:"北河三 Pollux",0:"北河二 Castor",3:"井宿三 Alhena"}},
-  {id:"can",zh:"巨蟹座",en:"Cancer",story:"最溫柔的守護，是一杯冰涼剛好的可爾必思。",
+  {id:"can",zh:"巨蟹座",en:"Cancer",tagline:"不被看見的勇敢",
+   story:"英雄赫拉克勒斯和九頭蛇搏鬥時，一隻小螃蟹從沼澤衝出來，用盡全力夾住英雄的腳。牠當然打不贏，但女神赫拉記得這份勇氣，把牠放上了夜空。巨蟹座的星星不亮，卻很溫柔——就像那些默默替你加油的人，不一定被看見，卻一直都在。",
    s:[[64,14],[54,36],[46,50],[20,62],[50,90]],l:[[0,1],[1,2],[2,3],[2,4]],names:{2:"鬼宿 積尸氣",4:"柳宿增十 Tarf",0:"鬼宿四"}},
-  {id:"leo",zh:"獅子座",en:"Leo",story:"勇敢面對生活的酸，才嚐得到後來的甜。",
+  {id:"leo",zh:"獅子座",en:"Leo",tagline:"怕了也願意面對",
+   story:"涅墨亞的獅子刀槍不入，赫拉克勒斯放下武器，用雙手和勇氣才制伏了牠。後來獅子化成星座，心臟的位置是最亮的軒轅十四。勇敢不是不害怕，而是怕了也願意面對——考卷上的紅字、說不出口的道歉，都是一頭等你收服的獅子。",
    s:[[6,64],[32,46],[70,48],[76,32],[86,28],[92,38],[26,62],[78,72]],
    l:[[0,1],[1,2],[2,3],[3,4],[4,5],[0,6],[6,7],[7,2]],names:{2:"軒轅十四 Regulus",0:"五帝座一 Denebola",3:"軒轅十二 Algieba"}},
-  {id:"vir",zh:"處女座",en:"Virgo",story:"把每個細節都照顧好，平凡也會閃閃發亮。",
+  {id:"vir",zh:"處女座",en:"Virgo",tagline:"等待下一個花季",
+   story:"豐收女神的女兒波瑟芬妮，每年有半年要去遙遠的冥界。她離開時，母親傷心，大地就進入冬天；她回來時，花便全開了。處女座手中的角宿一，是一束麥穗的光。日子有冷有暖、有酸有甜，耐心一點，下一個季節一定會開花。",
    s:[[4,60],[24,56],[38,52],[50,34],[62,40],[72,36],[74,18],[86,18],[86,30],[50,70],[28,72],[12,80],[46,86]],
    l:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[2,9],[9,10],[10,11],[9,12]],names:{9:"角宿一 Spica",6:"太微左垣四 Vindemiatrix",2:"東上相 Porrima"}},
-  {id:"lib",zh:"天秤座",en:"Libra",story:"酸與甜的平衡，剛剛好就是最好。",
+  {id:"lib",zh:"天秤座",en:"Libra",tagline:"剛剛好的平衡",
+   story:"正義女神阿斯特莉亞手持天秤，替世間衡量對與錯。人們吵個不停時，她回到了天上，卻把天秤留在星空提醒大家。課業、社團、朋友、睡眠——生活的天秤很難完美平衡；但酸與甜各一點，剛剛好，就是最好。",
    s:[[18,46],[28,54],[40,38],[48,8],[80,22],[84,62],[62,84],[64,94]],
    l:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]],names:{2:"氐宿一 Zubenelgenubi",4:"氐宿四 Zubeneschamali"}},
-  {id:"sco",zh:"天蠍座",en:"Scorpio",story:"深藏心底的心意，總有一天會被點亮。",
+  {id:"sco",zh:"天蠍座",en:"Scorpio",tagline:"藏在心底的紅色",
+   story:"一隻小蠍子讓驕傲的獵人奧利安學會了謙虛。眾神把牠們放在天空的兩端：一個升起，另一個就落下，永遠不會同時出現。天蠍的心臟心宿二是紅色的，像藏在心底的心意。有些話現在說不出口沒關係，總有一天，會在適合的夜晚被點亮。",
    s:[[76,8],[82,22],[80,34],[56,28],[36,62],[14,60],[8,72],[16,84],[34,88],[46,86]],
    l:[[0,3],[1,3],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]],names:{3:"心宿二 Antares",9:"尾宿八 Shaula",1:"房宿三 Dschubba"}},
-  {id:"sgr",zh:"射手座",en:"Sagittarius",story:"帶一瓶可爾必思出發，旅途中的每一刻都有星光。",
+  {id:"sgr",zh:"射手座",en:"Sagittarius",tagline:"為你指一個方向",
+   story:"半人馬凱隆是許多英雄的老師，教他們射箭、音樂和醫術。他把自己的不死之身讓給了別人，宙斯便讓他化為射手座，弓箭永遠指向銀河的中心。就像那位一直相信你的老師——在你迷路的時候，為你指一個方向。",
    s:[[10,64],[30,38],[44,40],[52,34],[40,22],[34,10],[62,40],[72,22],[78,50],[74,62],[64,64],[38,66],[32,88]],
    l:[[0,1],[1,2],[2,3],[3,4],[4,5],[3,6],[6,7],[6,8],[8,9],[9,10],[1,11],[11,12]],names:{11:"箕宿三 Kaus Australis",6:"斗宿四 Nunki"}},
-  {id:"cap",zh:"摩羯座",en:"Capricorn",story:"一步一步往上爬，汗水也會變成甜的。",
+  {id:"cap",zh:"摩羯座",en:"Capricorn",tagline:"狼狽也很可愛",
+   story:"牧神潘恩為了躲避怪物，慌忙跳進河裡想變成魚，結果變身只成功一半：上半身是山羊，下半身是魚尾。眾神看了覺得又好笑又可愛，就把這個樣子留在天上。不完美也沒關係，慌張的、狼狽的你，也是值得被記住的你。",
    s:[[8,52],[24,48],[42,46],[60,44],[78,34],[84,24],[64,74],[48,80]],
    l:[[0,1],[1,2],[2,3],[3,4],[4,5],[4,6],[6,7],[7,0]],names:{5:"牛宿二 Algedi",0:"壘壁陣四 Deneb Algedi"}},
-  {id:"aqr",zh:"水瓶座",en:"Aquarius",story:"倒出一點清爽，分給身邊最重要的人。",
+  {id:"aqr",zh:"水瓶座",en:"Aquarius",tagline:"倒一杯清爽給你",
+   story:"少年甘尼米德被邀請到天上，為眾神倒出清甜的瓊漿。他手中的水瓶一傾，水便沿著夜空流成一條星河。累的時候，給自己倒一杯清爽；也記得分一點給身邊的人，壓力就會被沖淡一點。",
    s:[[8,68],[16,34],[30,26],[44,22],[52,26],[48,50],[48,66],[60,34],[74,46],[88,58]],
    l:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[4,7],[7,8],[8,9]],names:{3:"危宿一 Sadalmelik",2:"虛宿一 Sadalsuud"}},
-  {id:"psc",zh:"雙魚座",en:"Pisces",story:"兩條魚游向不同方向，卻被同一份酸甜繫在一起。",
+  {id:"psc",zh:"雙魚座",en:"Pisces",tagline:"一條不會斷的線",
+   story:"愛神阿芙蘿黛蒂和兒子厄洛斯為了躲避怪物，化成兩條魚跳進河裡，又怕在水裡走散，便用一條絲帶把尾巴繫在一起。雙魚座的兩條魚游向不同方向，卻一直連著。就算以後去了不同的學校，那條線還在。",
    s:[[30,6],[34,18],[26,40],[12,72],[24,62],[42,66],[60,64],[76,64],[84,60],[92,68],[84,76],[76,72]],
    l:[[0,1],[1,2],[2,4],[4,3],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,7]],names:{3:"外屏七 Alrescha"}},
 ];
 const DIPPER = {id:"dip",zh:"北斗七星",en:"Big Dipper",special:true,w:200,h:110,
+  story:"七顆星連成一把勺子，古人說它能舀起銀河的水。在東方，北斗是指引方向的星：「斗柄東指，天下皆春」——它轉到哪裡，季節就跟到哪裡。可爾必思日，七瓶水語加上朋友的力量，我們一起把這把勺子舀滿，讓迷路的人也能看見方向。",
   s:[[30,22],[22,52],[56,64],[66,40],[100,54],[132,66],[178,92]],
   l:[[0,1],[1,2],[2,3],[3,0],[3,4],[4,5],[5,6]],
   starNames:["天樞","天璇","天璣","天權","玉衡","開陽","搖光"]};
@@ -516,6 +653,62 @@ const FRIENDS = ["小美","阿哲","Yuki","小安","柏宇","Mia","阿凱","可�
 const TOTAL = ZODIAC.reduce((n,c) => n + c.s.length, 0);
 const MAX = 6;
 const LEVELS = [0,12,36,72,111];
+
+/* ---------- 水籤 ---------- */
+const ICONS = {
+  "學業":"M3 5.5C5.5 4.5 8.5 4.5 12 6.5c3.5-2 6.5-2 9-1v13c-2.5-1-5.5-1-9 1-3.5-2-6.5-2-9-1z M12 6.5v13",
+  "友情":"M8.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M15.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z M3 19.5c.8-3.5 3-5.2 5.5-5.2s4.7 1.7 5.5 5.2 M12.6 15c.8-.5 1.8-.7 2.9-.7 2.5 0 4.7 1.7 5.5 5.2",
+  "戀愛":"M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z",
+  "健康":"M9.5 3.5h5v6h6v5h-6v6h-5v-6h-6v-5h6z",
+  "考運":"M4 20l1-4.2L16 4.8l3.2 3.2L8.2 19z M13.8 7l3.2 3.2 M4 20h16",
+  "青春":"M12 3c.6 4.8 2.2 6.4 7 7-4.8.6-6.4 2.2-7 7-.6-4.8-2.2-6.4-7-7 4.8-.6 6.4-2.2 7-7z",
+};
+const LEVEL_NAME = ["","一星","兩星","三星","四星","五星"];
+const MIKUJI = {
+  "學業":{
+    5:["酸甜滿分","遇見酸酸苦苦的題目別怕，你比自己想的更厲害。","讀完一章就喝一口，獎勵認真的自己。"],
+    4:["漸入佳境","卡住的那一題，換個角度就會通。","先寫會的，不會的留給清醒的明天。"],
+    3:["慢慢來","進度落後一點點沒關係，穩穩的就好。","今晚早點睡，記憶需要休息才能存檔。"],
+    2:["先喘口氣","腦袋塞滿的時候，什麼都讀不進去。","起來走走、喝口冰涼的，十分鐘後再回來。"],
+    1:["今天先放過自己","考不好不代表你不好，明天重新出發。","把今天的壓力，交給水語吧。"]},
+  "友情":{
+    5:["雙星共飲","有你在，就是最好的風景。","約朋友一起喝一瓶，讓浪漫加倍。"],
+    4:["默契加分","不用說出口，對方也懂你的意思。","傳一張好笑的貼圖，給好久沒聊的朋友。"],
+    3:["剛剛好的距離","好朋友不必天天黏在一起。","主動問一句：「最近還好嗎？」"],
+    2:["有點酸的誤會","酸酸的情緒，說開了就會變甜。","先道歉的人不是輸，是比較在乎。"],
+    1:["一個人也很好","有時候，需要自己安靜一下。","給自己一點時間，朋友會等你。"]},
+  "戀愛":{
+    5:["甜度爆表","那個人，也在偷偷注意你。","今天適合自然地說一聲早安。"],
+    4:["心動預告","擦身而過的瞬間，可能是故事的開始。","多笑一點，好感會悄悄累積。"],
+    3:["曖昧微酸","酸酸甜甜，才是青春的味道。","別急著要答案，享受現在的心跳。"],
+    2:["初戀味","可愛的，是那句說不出口的喜歡。","喜歡一點點，把心意放在這一口吧。"],
+    1:["先愛自己","照顧好自己，就是最好的魅力。","今天專心當一個閃亮的自己。"]},
+  "健康":{
+    5:["元氣滿滿","身體和心情，都在最佳狀態！","趁這股活力，去操場跑一圈吧。"],
+    4:["清爽一整天","好好吃飯、好好喝水，就是超能力。","多喝水，讓身體也跟著發光。"],
+    3:["記得補水","有點累了嗎？身體在提醒你。","每讀一小時，起來伸展五分鐘。"],
+    2:["熬夜警報","黑眼圈不會幫你考高分。","今晚十二點前，把手機放下。"],
+    1:["今天先放過自己","別把自己逼太緊，放鬆一下，世界沒那麼難。","喝多一點、睡飽一點，讓自己好好喘口氣。"]},
+};
+const THEMES = [
+  {name:"開學籤",months:[9],desc:"新班級、新座位，新的故事正要開始。",boost:{"友情":2},
+   sp:[["青春",4,"新的開始","新的座位、新的同學，故事正要開始。","主動跟隔壁同學說聲嗨。"],["友情",3,"慢熟也可以","還不熟沒關係，好朋友都是慢慢變熟的。","中午找個人一起吃飯吧。"]]},
+  {name:"期中籤",months:[10,11],desc:"期中考週，把壓力交給水語。",boost:{"學業":3},
+   sp:[["考運",5,"期中穩穩","你準備的，都會在考卷上發光。","考前喝一口，把緊張交給水語。"],["考運",2,"考完就放下","考完的科目，就讓它過去吧。","對答案可以等，休息不能等。"]]},
+  {name:"期末籤",months:[12],desc:"最後一哩路，一起撐過去。",boost:{"學業":3,"健康":2},
+   sp:[["考運",5,"期末滿分","最後一哩路，你比想像中更撐得住。","列一張清單，完成一項就劃掉一項。"],["健康",3,"別熬太晚","期末不是比誰睡得少。","讀累了，閉眼休息十分鐘也很有用。"]]},
+  {name:"學測籤",months:[1],desc:"給正在衝刺的你，一點溫柔的好運。",boost:{"學業":3},
+   sp:[["考運",5,"金榜水語","你寫下的每個答案，都會被溫柔對待。","考前一晚早點睡，就是最強的複習。"],["考運",3,"平常心","平常心，就是最好的實力。","慌的時候，喝一口，深呼吸。"]]},
+  {name:"新學期籤",months:[2],desc:"重新開機，這學期想做到什麼？",boost:{"學業":2},
+   sp:[["青春",4,"重新開機","上學期的遺憾，這學期還有機會。","寫下這學期想做到的一件小事。"],["學業",3,"新課本的味道","打開新課本，也打開新的可能。","先把第一章讀熟，就是好的開始。"]]},
+  {name:"友情籤",months:[3,4],desc:"春天適合和朋友一起做點什麼。",boost:{"友情":3},
+   sp:[["友情",5,"最佳搭檔","一起罰站、一起笑到肚子痛，這就是青春。","拍一張合照，記住今天。"],["友情",4,"分你一半","好東西要分享，煩惱也是。","把心事說給信任的人聽。"]]},
+  {name:"畢業籤",months:[5,6],desc:"畢業不是結束，是換個地方發光。",boost:{"友情":2,"戀愛":1},
+   sp:[["青春",5,"未來閃耀","不管走到哪裡，這片星空都會記得你。","跟重要的人說一聲謝謝。"],["友情",4,"不說再見","畢業不是結束，是換個地方繼續發光。","交換一句，想對彼此說的話。"]]},
+  {name:"夏日籤",months:[7,8],desc:"放假了，去做一件一直想做的事。",boost:{"健康":2},
+   sp:[["健康",5,"夏日清爽","冰涼的一口，整個夏天都亮了。","出門記得防曬，多補水。"],["青春",4,"自由的風","放假了，去做一件一直想做的事。","和朋友約一次看星星。"]]},
+];
+const STAR_WEIGHTS = [[5,.15],[4,.25],[3,.3],[2,.18],[1,.12]];
 
 /* ======================================================
    STORE（正式版：換成後台 API + 即時同步）
@@ -544,12 +737,15 @@ const $$ = s => [...document.querySelectorAll(s)];
 const uid = () => Math.random().toString(36).slice(2,9);
 const esc = s => String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+const todayKey = () => { const d = new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); };
 const params = new URLSearchParams(location.search);
 const invitePin = (params.get("pin") || "").replace(/\D/g,"").slice(0,6);
 const viaInvite = invitePin.length === 6;
 
 let demoDay = false, view = "all", busy = false;
-let me = SS.get("calpis-me") || (viaInvite ? null : LS.get("calpis-me")) || {id:uid(), name:"", email:"", logged:false, room:null, rooms:[]};
+let me = SS.get("calpis-me") || (viaInvite ? null : LS.get("calpis-me")) || {};
+me = Object.assign({id:uid(), name:"", email:"", logged:false, room:null, rooms:[]}, me);
+me.mk = Object.assign({free:"", tickets:0, bag:[]}, me.mk || {});
 let room = null;
 const saveMe = () => { SS.set("calpis-me", me); if(!viaInvite) LS.set("calpis-me", me); };
 
@@ -584,7 +780,6 @@ const zodiacLit = () => ZODIAC.reduce((n,c) => n + litOf(c).length, 0);
 const myLit = () => [DIPPER, ...ZODIAC].reduce((n,c) => n + litOf(c).filter(o => o.by === me.id).length, 0);
 const byId = id => id === "dip" ? DIPPER : ZODIAC.find(c => c.id === id);
 
-/* Calpis Day: 4/7, 5/7, 6/7 */
 function isDay(){ const d = new Date(); return demoDay || (d.getDate() === 7 && CAMPAIGN.days.some(x => x.m === d.getMonth()+1)); }
 function nextDay(){
   const d = new Date(); d.setHours(0,0,0,0);
@@ -594,10 +789,41 @@ function nextDay(){
 function stageIndex(){ const n = litOf(DIPPER).length; return n >= 7 ? 2 : n >= 3 ? 1 : 0; }
 
 /* ======================================================
-   SVG：水玉星 renderer（點亮的星＝發光的白色水玉）
+   SVG：bottle（寫實的可爾必思 Water 瓶）
    ====================================================== */
 function rng(seed){ let a = 0; for(const ch of seed) a = (a*31 + ch.charCodeAt(0)) >>> 0; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const BODY = "M42 41 L78 41 L78 58 C78 72 106 82 106 112 L106 316 Q106 332 90 332 L30 332 Q14 332 14 316 L14 112 C14 82 42 72 42 58 Z";
+function bottleG(o = {}){
+  const r = rng("bt" + (o.seed || ""));
+  let bub = "";
+  const spots = [[20,104,5],[34,98,3],[96,100,4],[86,112,2.5],[24,122,2.5],[100,124,3],[30,136,6],[92,140,4.5],[18,150,3],[102,158,2.5],[26,226,3.5],[96,222,5],[86,238,2.5],[20,244,2]];
+  spots.forEach(([x,y,s], i) => {
+    const onBand = y < 132;
+    bub += `<circle cx="${x}" cy="${y}" r="${s}" fill="${onBand ? "#ffffff" : "#3f8fe6"}" opacity="${onBand ? .85 : .75}" ${o.twinkle && r() < .5 ? `class="dot-tw" style="animation-delay:${(r()*2.6).toFixed(2)}s"` : ""}/>`;
+  });
+  return `
+    <rect x="38" y="4" width="44" height="32" rx="5" fill="url(#btCap)"/>
+    <g stroke="#cad4df" stroke-width=".8">${Array.from({length:10},(_,i) => `<line x1="${41+i*4}" y1="7" x2="${41+i*4}" y2="33"/>`).join("")}</g>
+    <rect x="35" y="34" width="50" height="7" rx="2" fill="#e3e9f0" stroke="#cbd5e0" stroke-width=".6"/>
+    <path d="${BODY}" fill="url(#btBody)" stroke="#c4cfdc" stroke-width="1"/>
+    <g clip-path="url(#btClip)">
+      <path d="M0 92 C30 80 70 104 120 86 L120 124 C80 140 40 116 0 134Z" fill="url(#btBand)"/>
+      <path d="M0 134 C40 116 80 140 120 124" fill="none" stroke="#ffffff" stroke-width="1.5" opacity=".9"/>
+      ${bub}
+      <path d="M14 262 C40 266 80 266 106 262 M14 272 C40 276 80 276 106 272" fill="none" stroke="#d0d9e4" stroke-width="1.2"/>
+      <rect x="22" y="78" width="7" height="236" rx="3.5" fill="#fff" opacity=".7"/>
+      <rect x="92" y="90" width="4" height="220" rx="2" fill="#b9c5d4" opacity=".35"/>
+    </g>
+    ${o.label === false ? "" : `
+    <text x="60" y="166" text-anchor="middle" font-family="Noto Sans TC,sans-serif" font-weight="900" font-size="17" fill="#1546ad" letter-spacing="1">可爾必思</text>
+    <text x="57" y="196" text-anchor="middle" font-family="Dancing Script,cursive" font-weight="700" font-size="31" fill="#1d5fd1" transform="rotate(-6 57 190)">Water</text>
+    <text x="88" y="208" text-anchor="middle" font-family="Noto Sans TC,sans-serif" font-weight="700" font-size="8.5" fill="#1d5fd1">水語</text>`}`;
+}
+const bottleSVG = (cls = "", o = {}) => `<svg class="${cls}" viewBox="0 0 120 340">${bottleG(o)}</svg>`;
 
+/* ======================================================
+   SVG：水玉星 renderer
+   ====================================================== */
 function starSVG(c, o = {}){
   const W = c.w || 100, H = c.h || 100;
   const P = c.special ? (q => q) : ([x,y]) => [16 + x*.68, 15 + y*.68];
@@ -650,9 +876,72 @@ function starSVG(c, o = {}){
   return s + `</svg>`;
 }
 
-const bottleIcon = on => `<svg viewBox="0 0 24 52"><rect x="8" y="1" width="8" height="6" rx="1.5" fill="${on ? "#fff" : "none"}" stroke="#bfe3f7" stroke-width="1"/>
-  <path d="M8 7h8v3q0 3 4 6 2 2 2 6v24q0 4-4 4H6q-4 0-4-4V22q0-4 2-6 4-3 4-6z" fill="${on ? "#fff" : "none"}" stroke="#bfe3f7" stroke-width="1.2"/>
-  ${on ? `<g fill="#5fb0f0"><circle cx="8" cy="26" r="1.6"/><circle cx="15" cy="24" r="1.6"/><circle cx="12" cy="32" r="1.6"/><circle cx="7" cy="39" r="1.6"/><circle cx="16" cy="40" r="1.6"/></g>` : ""}</svg>`;
+/* ======================================================
+   SVG：水籤 omikuji card
+   ====================================================== */
+function starPts(cx, cy, R, ri){
+  const p = [];
+  for(let i=0;i<10;i++){ const a = -Math.PI/2 + i*Math.PI/5, rr = i % 2 ? ri : R; p.push([cx + rr*Math.cos(a), cy + rr*Math.sin(a)]); }
+  return p;
+}
+const OMK_PTS = starPts(200, 206, 168, 104);
+const OMK_POLY = OMK_PTS.map(p => p.map(v => v.toFixed(1)).join(",")).join(" ");
+$("#gdefs").insertAdjacentHTML("beforeend", `<clipPath id="omkClip"><polygon points="${OMK_POLY}"/></clipPath>`);
+const sparkle = (x, y, s, fill, op = 1) => `<path d="M${x} ${y-s}C${x+s*.16} ${y-s*.16} ${x+s*.16} ${y-s*.16} ${x+s} ${y}C${x+s*.16} ${y+s*.16} ${x+s*.16} ${y+s*.16} ${x} ${y+s}C${x-s*.16} ${y+s*.16} ${x-s*.16} ${y+s*.16} ${x-s} ${y}C${x-s*.16} ${y-s*.16} ${x-s*.16} ${y-s*.16} ${x} ${y-s}Z" fill="${fill}" opacity="${op}"/>`;
+const OMK_ART = `<svg class="omk-art" viewBox="0 0 400 380" aria-hidden="true">
+  <polygon points="${OMK_POLY}" fill="#dce8f6" stroke="#dce8f6" stroke-width="50" stroke-linejoin="round"/>
+  <polygon points="${OMK_POLY}" fill="#fff" stroke="#fff" stroke-width="46" stroke-linejoin="round"/>
+  <polygon points="${OMK_POLY}" fill="url(#omkBlue)" stroke="url(#omkBlue)" stroke-width="22" stroke-linejoin="round"/>
+  <g clip-path="url(#omkClip)">
+    <path d="M-10 150 C40 124 90 132 140 136 C190 140 230 128 270 128 C320 128 360 132 410 152 L410 400 L-10 400Z" fill="url(#omkPanel)"/>
+    <ellipse cx="70" cy="330" rx="90" ry="34" fill="#cfe2f8" opacity=".9"/><ellipse cx="320" cy="336" rx="100" ry="36" fill="#cfe2f8" opacity=".9"/>
+    <ellipse cx="140" cy="352" rx="80" ry="24" fill="#e2eefb"/><ellipse cx="270" cy="356" rx="90" ry="26" fill="#e2eefb"/>
+  </g>
+  <path d="M250 70 Q290 58 318 64" fill="none" stroke="#fff" stroke-width="1.2" opacity=".7" stroke-linecap="round"/>
+  ${sparkle(80,150,10,"#fff",.95)}${sparkle(322,158,9,"#fff",.9)}${sparkle(118,118,4,"#fff",.8)}${sparkle(292,112,5,"#fff",.8)}${sparkle(200,46,3,"#fff",.6)}
+  ${sparkle(110,232,6,"#1d5fd1",.75)}${sparkle(304,220,5,"#1d5fd1",.6)}${sparkle(96,300,4,"#fff",.9)}
+  <g transform="translate(298 252) rotate(14) scale(.27)">${bottleG({label:false, seed:"omk"})}</g>
+</svg>`;
+
+const OMK_BLANK = `<svg class="omk-blank" viewBox="0 0 400 380" aria-hidden="true">
+  <polygon points="${OMK_POLY}" fill="#fbfdff" stroke="#fbfdff" stroke-width="44" stroke-linejoin="round"/>
+  <polygon points="${OMK_POLY}" fill="none" stroke="#e1eaf5" stroke-width="1.5" stroke-linejoin="round" transform="translate(20 19.6) scale(.9)"/>
+  <g stroke="#e9f0f8" stroke-width="1" clip-path="url(#omkClip)">${Array.from({length:14},(_,i) => `<line x1="40" y1="${70+i*20}" x2="360" y2="${66+i*20}"/>`).join("")}</g>
+</svg>`;
+function catIcon(cat){ return `<svg viewBox="0 0 24 24"><path d="${ICONS[cat] || ICONS["青春"]}"/></svg>`; }
+function omikujiHTML(f, cls = ""){
+  return `<div class="omikuji ${cls}">${OMK_ART}${OMK_BLANK}
+    <div class="omk-txt">
+      <div class="omk-ic">${catIcon(f.cat)}</div>
+      <div class="omk-cat">${f.cat}運勢</div>
+      <div class="omk-stars">${"★".repeat(f.stars)}</div>
+      <div class="omk-no">${esc(f.theme)} · NO.${String(f.no).padStart(2,"0")}</div>
+      <div class="omk-title">${LEVEL_NAME[f.stars]}・${esc(f.title)}</div>
+      <div class="omk-hr"></div>
+      <div class="omk-body">${esc(f.body)}</div>
+      <div class="omk-pill">本週提醒</div>
+      <div class="omk-rm">${esc(f.remind)}</div>
+    </div></div>`;
+}
+
+function currentTheme(){ const m = new Date().getMonth()+1; return THEMES.find(t => t.months.includes(m)) || THEMES[1]; }
+function drawFortune(){
+  const th = currentTheme();
+  const no = 1 + Math.floor(Math.random()*64);
+  if(th.sp.length && Math.random() < .3){
+    const [cat, stars, title, body, remind] = th.sp[Math.floor(Math.random()*th.sp.length)];
+    return {cat, stars, title, body, remind, theme:th.name, no, at:Date.now(), id:uid()};
+  }
+  const cats = Object.keys(MIKUJI), w = cats.map(c => (th.boost[c] || 1));
+  let t = Math.random() * w.reduce((a,b) => a+b, 0), cat = cats[0];
+  for(let i=0;i<cats.length;i++){ t -= w[i]; if(t <= 0){ cat = cats[i]; break; } }
+  let u = Math.random(), stars = 3;
+  for(const [s, p] of STAR_WEIGHTS){ u -= p; if(u <= 0){ stars = s; break; } }
+  const [title, body, remind] = MIKUJI[cat][stars];
+  return {cat, stars, title, body, remind, theme:th.name, no, at:Date.now(), id:uid()};
+}
+const freeLeft = () => me.mk.free !== todayKey();
+const drawsLeft = () => (freeLeft() ? 1 : 0) + me.mk.tickets;
 
 /* ======================================================
    RENDER
@@ -662,12 +951,13 @@ function renderHome(){
   $("#tlHome").innerHTML = CAMPAIGN.days.map((x,i) => `<div class="${started && i === si ? "now" : ""}"><small>第 ${i+1} 階段</small><b>${x.m}/7</b><strong>${x.title}</strong><span>${x.sub}</span></div>`).join("");
   $("#rwHome").innerHTML = `
     <figure><div class="art">${starSVG(DIPPER,{full:true})}</div><figcaption>北斗七星完整點亮<span>專屬動畫</span></figcaption></figure>
-    <figure><div class="art"><svg viewBox="0 0 100 100"><rect x="30" y="12" width="40" height="76" rx="7" fill="#0a1f63" stroke="#bfe3f7" stroke-width="1.2"/>
+    <figure><div class="art"><svg viewBox="0 0 100 100"><rect x="31" y="12" width="38" height="76" rx="6" fill="#0a1f63" stroke="#bfe3f7" stroke-width="1"/>
       <polyline points="40,34 48,40 57,38 62,50 54,58 46,66" fill="none" stroke="#bfe3f7" stroke-width="1" stroke-dasharray="0 2.4" stroke-linecap="round"/>
-      <g fill="#fff">${[[40,34],[48,40],[57,38],[62,50],[54,58],[46,66]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="1.8"/>`).join("")}</g>
-      <text x="50" y="24" text-anchor="middle" font-family="Cinzel" font-size="6" fill="#bfe3f7">CALPIS</text><rect x="38" y="76" width="24" height="5" rx="2.5" fill="#fff"/></svg></div><figcaption>生成紀念圖<span>分享至社群</span></figcaption></figure>
-    <figure><div class="art"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="url(#haloG)"/><path d="M50 30l6 13 14 1.6-10.5 9.6 3 14L50 61l-12.5 7.2 3-14L30 44.6 44 43z" fill="#ffe6a3" stroke="#fff" stroke-width="1"/></svg></div><figcaption>收藏限定星星<span>保留在個人星河</span></figcaption></figure>`;
+      <g fill="#fff">${[[40,34],[48,40],[57,38],[62,50],[54,58],[46,66]].map(([x,y]) => `<circle cx="${x}" cy="${y}" r="1.6"/>`).join("")}</g>
+      <rect x="40" y="78" width="20" height="3" rx="1.5" fill="#bfe3f7"/></svg></div><figcaption>生成紀念圖<span>分享至社群</span></figcaption></figure>
+    <figure><div class="art"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="url(#haloG)"/><circle cx="50" cy="50" r="7" fill="#fff"/></svg></div><figcaption>收藏限定星星<span>保留在個人星河</span></figcaption></figure>`;
   $("#period").textContent = `活動期間：${CAMPAIGN.start} – ${CAMPAIGN.end}`;
+  $("#teaserCard").innerHTML = omikujiHTML({cat:"友情",stars:5,title:"雙星共飲",body:"有你在，就是最好的風景。",remind:"約朋友一起喝一瓶，讓浪漫加倍。",theme:currentTheme().name,no:7});
 }
 
 function renderMap(mark = {}){
@@ -681,6 +971,7 @@ function renderMap(mark = {}){
   $("#mapHint").textContent = room ? `房間 ${room.pin}：我們一起點亮了 ${zodiacLit()} / ${TOTAL} 顆星` : "登入後輸入瓶蓋序號，開始點亮你的星河";
 }
 
+const bottleIcon = on => bottleSVG(on ? "" : "off", {label:false, seed:"i"});
 function renderDipper(mark = {}){
   const n = litOf(DIPPER).length, open = isDay();
   $("#dipTag").textContent = open ? "今日開放中" : "限時開放";
@@ -696,7 +987,16 @@ function renderDipper(mark = {}){
     <p class="meta">活動時間：4・5・6 月每月 7 號 00:00 – 23:59<br>可爾必思日當天，每組序號會額外點亮一顆北斗星，從天樞依序亮到搖光。</p>`;
   const si = stageIndex();
   $("#dipTl").innerHTML = CAMPAIGN.days.map((x,i) => `<div class="${n && i === si ? "now" : ""}"><b>${x.m}/7</b><strong>${x.title}</strong><span>${x.sub}</span></div>`).join("");
+  $("#dipStory").textContent = DIPPER.story;
   const dd = $("#demoDay"); if(dd) dd.onclick = () => { demoDay = true; renderAll(); toast("已切換為可爾必思日", "北斗七星地圖開放中"); };
+}
+
+function feedText(e){
+  const m = member(e.by), c = e.c && byId(e.c), who = e.by === me.id ? "你" : esc(m.name);
+  if(e.kind === "join") return `<b>${who}</b> 加入了房間`;
+  if(e.kind === "done") return `<b>${who}</b> 讓大家集滿了 <b>${c.zh}</b> ✦`;
+  if(e.kind === "mikuji") return `<b>${who}</b> 抽到 <b>${e.f.cat}運勢・${LEVEL_NAME[e.f.stars]}</b>`;
+  return `<b>${who}</b> 點亮了 <b>${c.zh}</b> 的一顆星`;
 }
 
 function renderMe(){
@@ -724,7 +1024,7 @@ function renderMe(){
         <div class="stats">
           <div><span>已點亮星星</span><b>${mine}<small> 顆</small></b></div>
           <div><span>已完成星座</span><b>${full}<small> / 12</small></b></div>
-          <div><span>好友星河</span><b>${me.rooms.length}<small> 個房間</small></b></div>
+          <div><span>抽過的水籤</span><b>${me.mk.bag.length}<small> 張</small></b></div>
         </div>
       </div>
       <div class="glass card">
@@ -734,6 +1034,8 @@ function renderMe(){
             <div><b>星河地圖（12 星座）</b><span>已探索 ${ZODIAC.filter(c => litOf(c).length).length} / 12</span></div><span class="tag open">開放中</span></a>
           <a class="maprow" href="#dipper"><svg viewBox="0 0 200 110">${DIPPER.s.map(([x,y]) => `<circle cx="${x}" cy="${y}" r="6" fill="#fff"/>`).join("")}</svg>
             <div><b>北斗七星地圖</b><span>4・5・6 月每月 7 號・${litOf(DIPPER).length}/7</span></div><span class="tag limit">限時開放</span></a>
+          <a class="maprow" href="#mikuji"><svg viewBox="0 0 64 40"><path d="M32 6l3.5 7.2 8 1-5.8 5.4 1.4 7.9L32 23.6l-7.1 3.9 1.4-7.9-5.8-5.4 8-1z" fill="none" stroke="#bfe3f7" stroke-width="1.2" stroke-linejoin="round"/><path d="M14 34c6-3 12-3 18 0s12 3 18 0" fill="none" stroke="#bfe3f7" stroke-width="1.2"/></svg>
+            <div><b>水籤・${currentTheme().name}</b><span>可抽 ${drawsLeft()} 次・籤袋 ${me.mk.bag.length} 張</span></div><span class="tag open">開放中</span></a>
           <div class="maprow locked"><svg viewBox="0 0 64 40"><path d="M14 14Q32 40 50 26" fill="none" stroke="#bfe3f7" stroke-dasharray="0 2.5" stroke-linecap="round" stroke-width="1.2" opacity=".6"/><circle cx="14" cy="14" r="2.4" fill="#fff"/><circle cx="50" cy="26" r="2.4" fill="#fff"/></svg>
             <div><b>牛郎織女地圖</b><span>七夕 7/7，敬請期待</span></div><span class="tag lock">待解鎖</span></div>
         </div>
@@ -754,36 +1056,268 @@ function renderMe(){
       </div>
       <div class="glass card" style="grid-column:1/-1">
         <h3>星河動態</h3>
-        <ul class="feed">${room.feed.slice(0,8).map(e => {
-          const m = member(e.by), c = e.c && byId(e.c);
-          const t = e.kind === "join" ? "加入了房間" : e.kind === "done" ? `集滿了 <b>${c.zh}</b> ✦` : `點亮了 <b>${c.zh}</b> 的一顆星`;
-          return `<li><i class="d" style="background:${m.color}"></i><span><b>${e.by === me.id ? "你" : esc(m.name)}</b> ${t}</span><span class="t">${ago(e.at)}</span></li>`;
-        }).join("")}</ul>
+        <ul class="feed">${room.feed.slice(0,10).map(e => `<li><i class="d" style="background:${member(e.by).color}"></i><span>${feedText(e)}</span><span class="t">${ago(e.at)}</span></li>`).join("")}</ul>
         <div class="row"><button class="chip" data-act="rename">修改暱稱</button><button class="chip" data-act="logout">登出</button></div>
       </div>
     </div>`;
 }
 function ago(t){ const s = (Date.now()-t)/1000; return s < 60 ? "剛剛" : s < 3600 ? Math.floor(s/60)+" 分鐘前" : s < 86400 ? Math.floor(s/3600)+" 小時前" : Math.floor(s/86400)+" 天前"; }
 
-function renderAll(mark){ renderHome(); renderMap(mark && mark.c !== "dip" ? mark : {}); renderDipper(mark || {}); renderMe(); }
+/* ---- 水籤 page ---- */
+let mkState = "idle", mkCur = null;
+function renderMikuji(){
+  const th = currentTheme(), m = new Date().getMonth()+1;
+  $("#themeCard").innerHTML = `<div class="now"><span class="tag limit">本波主題</span><b>${th.name}</b></div><p>${th.desc}這一波會多出「${[...new Set(th.sp.map(s => s[0]))].join("、")}」的限定籤詩。</p>
+    <div class="cal">${THEMES.map(t => `<span class="${t === th ? "on" : ""}">${t.months.join("–")}月 ${t.name}</span>`).join("")}</div>`;
+  const n = drawsLeft();
+  $("#quota").innerHTML = `<div><span>今天還能抽</span><b>${n} 次</b><span>每天免費 1 次・每點亮一顆星 +1 張水籤券</span></div>
+    <button class="chip dash" data-act="ticket">展示用：+1 張</button>`;
+  const today = todayKey();
+  const fr = room ? room.feed.filter(e => e.kind === "mikuji" && e.by !== me.id && new Date(e.at).toDateString() === new Date().toDateString()).slice(0,5) : [];
+  $("#friendsBag").innerHTML = `<h3>朋友今天的籤 <button class="chip dash" data-act="simMk" style="font-size:11.5px;padding:4px 10px">展示用：朋友抽一張</button></h3>
+    ${fr.length ? `<ul>${fr.map(e => `<li data-mk-feed="${e.f.id}"><span class="who" style="background:${member(e.by).color}">${esc(member(e.by).name.slice(0,1))}</span><div><b>${esc(member(e.by).name)}</b>・${e.f.cat}運勢<br><span class="s">${"★".repeat(e.f.stars)}</span> ${esc(e.f.title)}</div><span class="t">${ago(e.at)}</span></li>`).join("")}</ul>`
+      : `<p class="empty">${room ? "朋友今天還沒抽籤。抽完記得叫大家來比一比！" : "登入並邀請朋友，就能看到彼此抽到的籤。"}</p>`}`;
+  const bag = me.mk.bag.slice(0,6);
+  $("#myBag").innerHTML = `<h3>我的籤袋<span style="font-size:12px;color:var(--dim)">${me.mk.bag.length} 張</span></h3>
+    ${bag.length ? `<ul>${bag.map(f => `<li data-mk="${f.id}"><span class="who" style="background:#d9efff">${f.cat.slice(0,1)}</span><div><b>${f.cat}運勢</b>・${esc(f.theme)}<br><span class="s">${"★".repeat(f.stars)}</span> ${esc(f.title)}</div><span class="t">${ago(f.at)}</span></li>`).join("")}</ul>` : `<p class="empty">還沒有籤。抽到的籤都會收在這裡。</p>`}`;
+  $$("[data-badge]").forEach(b => { b.hidden = !n; b.textContent = n; });
+  if(mkState === "idle") renderDrawBox();
+}
+function renderDrawBox(){
+  const n = drawsLeft();
+  $("#drawbox").hidden = false;
+  $("#drawbox").innerHTML = `
+    <svg class="tube" id="tube" viewBox="0 0 80 120"><defs><linearGradient id="tb" x1="0" x2="1"><stop offset="0" stop-color="#cfdceb"/><stop offset=".4" stop-color="#fff"/><stop offset="1" stop-color="#c6d3e2"/></linearGradient></defs>
+      <g stroke="#e9f2fb" stroke-width="3" stroke-linecap="round"><line x1="30" y1="30" x2="26" y2="4"/><line x1="40" y1="30" x2="41" y2="0"/><line x1="50" y1="30" x2="55" y2="6"/></g>
+      <path d="M22 26h36l-4 88q0 4-4 4H30q-4 0-4-4z" fill="url(#tb)" stroke="#b8c7d8"/>
+      <path d="M23 46c10-6 24 6 34 0v20c-10 6-24-6-34 0z" fill="#1d5fd1"/><circle cx="32" cy="54" r="2" fill="#fff"/><circle cx="46" cy="58" r="1.4" fill="#fff"/>
+      <text x="40" y="92" text-anchor="middle" font-family="LXGW WenKai TC,serif" font-size="13" fill="#1546ad" font-weight="700">水籤</text></svg>
+    <p>${n ? "今天，想把什麼交給水語？" : "今天的水籤抽完了"}</p>
+    <small>${n ? "抽一張白色的籤紙，再把它放進水裡。" : "喝一瓶可爾必思水語、點亮一顆星，就能再抽一次。"}</small>
+    <button class="pill" id="drawBtn" ${n ? "" : "disabled"}>${freeLeft() ? "抽一張水籤（今日免費）" : `使用水籤券（剩 ${me.mk.tickets} 張）`}</button>`;
+  $("#drawBtn").onclick = startDraw;
+}
+
+function renderAll(mark){ renderHome(); renderMap(mark && mark.c !== "dip" ? mark : {}); renderDipper(mark || {}); renderMe(); renderMikuji(); }
+
+/* ======================================================
+   水籤 interaction
+   ====================================================== */
+async function startDraw(){
+  if(!drawsLeft() || mkState !== "idle") return;
+  mkState = "drawing";
+  $("#tube").classList.add("shake");
+  await sleep(750);
+  if(freeLeft()) me.mk.free = todayKey(); else me.mk.tickets--;
+  mkCur = drawFortune();
+  saveMe();
+  $("#drawbox").hidden = true;
+  const paper = $("#paper");
+  paper.className = "paper hide";
+  paper.style.transform = "";
+  paper.innerHTML = omikujiHTML(mkCur, "blank");
+  requestAnimationFrame(() => { paper.className = "paper anim"; });
+  await sleep(700);
+  mkState = "blank";
+  $("#dipBtn").hidden = false;
+  $("#pondTip").textContent = "把籤紙拖進水裡，或按「放入水中」";
+  $$("[data-badge]").forEach(b => { const n = drawsLeft(); b.hidden = !n; b.textContent = n; });
+}
+
+(function dragPaper(){
+  const paper = $("#paper");
+  let sx, sy, dragging = false;
+  paper.addEventListener("pointerdown", e => {
+    if(mkState !== "blank") return;
+    dragging = true; sx = e.clientX; sy = e.clientY;
+    paper.classList.remove("anim"); paper.classList.add("dragging");
+    paper.setPointerCapture(e.pointerId);
+  });
+  paper.addEventListener("pointermove", e => {
+    if(!dragging) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    paper.style.transform = `translate(${dx}px, ${dy}px) rotate(${dx/40}deg)`;
+    if(Math.random() < .3) Water.drip(e.clientX, e.clientY);
+  });
+  const end = e => {
+    if(!dragging) return;
+    dragging = false; paper.classList.remove("dragging");
+    const pr = paper.getBoundingClientRect(), wr = $("#water").getBoundingClientRect();
+    if(pr.top + pr.height*.55 > wr.top) dip();
+    else { paper.classList.add("anim"); paper.style.transform = ""; }
+  };
+  paper.addEventListener("pointerup", end);
+  paper.addEventListener("pointercancel", end);
+})();
+$("#dipBtn").onclick = () => dip();
+
+async function dip(){
+  if(mkState !== "blank") return;
+  mkState = "dipping";
+  $("#dipBtn").hidden = true;
+  const paper = $("#paper"), pond = $("#pond").getBoundingClientRect(), wr = $("#water").getBoundingClientRect();
+  const pr0 = paper.getBoundingClientRect();
+  const cur = paper.style.transform.match(/translate\(([-\d.]+)px, ([-\d.]+)px\)/);
+  const baseTop = pr0.top - (cur ? +cur[2] : 0);
+  const targetY = wr.top + wr.height*.32 - baseTop - pr0.height*.35;
+  paper.classList.add("anim");
+  paper.style.transform = `translate(0px, ${targetY}px) scale(.78) rotate(-3deg)`;
+  $("#pondTip").textContent = "籤紙吸了水，字慢慢浮現……";
+  await sleep(650);
+  const cx = wr.left + wr.width/2, cy = wr.top + wr.height*.42;
+  Water.splash(cx - wr.left, cy - wr.top, 1);
+  FX.burst(cx, cy, true);
+  paper.querySelector(".omikuji").classList.add("wet");
+  await sleep(500);
+  const card = paper.querySelector(".omikuji");
+  card.classList.remove("blank", "wet"); card.classList.add("reveal");
+  await sleep(2100);
+  paper.style.transform = "translate(0px, 0px) scale(1) rotate(0deg)";
+  await sleep(800);
+  const r2 = paper.getBoundingClientRect();
+  for(let i=0;i<3;i++) setTimeout(() => FX.burst(r2.left + r2.width*(.25 + .25*i), r2.top + r2.height*.4, false), i*160);
+  mkState = "done";
+  me.mk.bag.unshift(mkCur); me.mk.bag = me.mk.bag.slice(0,50); saveMe();
+  if(room){ room.feed.unshift({by:me.id, kind:"mikuji", f:mkCur, at:Date.now()}); Store.save(room); }
+  $("#pondTip").textContent = "";
+  const a = $("#after"); a.hidden = false;
+  a.innerHTML = `<button class="pill blue sm" data-act="shareMk">分享籤詩圖</button><button class="pill sm" data-act="cmpMk">傳給朋友比一比</button><button class="pill ghost sm" data-act="againMk">${drawsLeft() ? `再抽一張（剩 ${drawsLeft()}）` : "收進籤袋"}</button>`;
+  renderMe(); renderMikuji();
+}
+function resetPond(){
+  mkState = "idle"; mkCur = null;
+  $("#paper").className = "paper hide"; $("#paper").style.transform = "";
+  $("#after").hidden = true; $("#dipBtn").hidden = true;
+  $("#pondTip").textContent = "輕點水面，也會有漣漪";
+  renderMikuji();
+}
+
+/* water canvas */
+const Water = (() => {
+  const cv = $("#water"), x = cv.getContext("2d");
+  let W = 0, H = 0, rip = [], bubbles = [], t = 0;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  function size(){ W = cv.clientWidth; H = cv.clientHeight; cv.width = W*dpr; cv.height = H*dpr; x.setTransform(dpr,0,0,dpr,0,0);
+    const r = rng("bub"); bubbles = Array.from({length:Math.round(W/14)}, () => ({x:r()*W, y:r()*H, r:r()*3.2+1.2, v:r()*.25+.08, p:r()*6})); }
+  function splash(px, py, big){ for(let i=0;i<(big ? 4 : 2);i++) rip.push({x:px, y:py, r:4 + i*10, a:1, v:big ? 1.6 : 1.1}); }
+  function frame(){
+    if(cur() === "mikuji" && W){
+      t += .016;
+      const g = x.createLinearGradient(0,0,0,H);
+      g.addColorStop(0,"#9fd3f7"); g.addColorStop(.25,"#4f97e6"); g.addColorStop(1,"#0c2e86");
+      x.fillStyle = g; x.fillRect(0,0,W,H);
+      // surface shimmer
+      x.globalAlpha = .5; x.strokeStyle = "#e9f6ff"; x.lineWidth = 1.2;
+      for(let k=0;k<6;k++){
+        x.beginPath();
+        for(let px=0; px<=W; px+=12){ const py = 10 + k*(H/7) + Math.sin(px/40 + t*1.4 + k)*3; px ? x.lineTo(px,py) : x.moveTo(px,py); }
+        x.globalAlpha = .28 - k*.035; x.stroke();
+      }
+      // polka bubbles rising
+      for(const b of bubbles){
+        b.y -= b.v; b.p += .03; if(b.y < -6){ b.y = H + 6; }
+        x.globalAlpha = .45 + .3*Math.sin(b.p); x.fillStyle = "#ffffff";
+        x.beginPath(); x.arc(b.x + Math.sin(b.p)*3, b.y, b.r, 0, 7); x.fill();
+      }
+      // ripples (elliptical, perspective)
+      rip = rip.filter(r => r.a > .02);
+      for(const r of rip){
+        r.r += r.v*1.8; r.a *= .975;
+        x.globalAlpha = r.a; x.strokeStyle = "#ffffff"; x.lineWidth = 1.6;
+        x.beginPath(); x.ellipse(r.x, r.y, r.r, r.r*.38, 0, 0, 7); x.stroke();
+      }
+      x.globalAlpha = 1;
+    }
+    requestAnimationFrame(frame);
+  }
+  cv.addEventListener("pointerdown", e => { const b = cv.getBoundingClientRect(); splash(e.clientX - b.left, e.clientY - b.top, false); });
+  addEventListener("resize", size);
+  setTimeout(size, 0); frame();
+  return { splash, size, drip(cx, cy){ const b = cv.getBoundingClientRect(); if(cy > b.top) splash(cx - b.left, cy - b.top, false); } };
+})();
+
+/* share fortune image */
+function wrapLines(ctx, text, maxW){
+  const out = []; let line = "";
+  for(const ch of text){ if(ctx.measureText(line + ch).width > maxW && line){ out.push(line); line = ch; } else line += ch; }
+  if(line) out.push(line); return out;
+}
+function drawOmikujiCanvas(x, ox, oy, w, f){
+  const k = w/400;
+  x.save(); x.translate(ox, oy); x.scale(k, k);
+  const poly = () => { x.beginPath(); OMK_PTS.forEach(([a,b],i) => i ? x.lineTo(a,b) : x.moveTo(a,b)); x.closePath(); };
+  x.lineJoin = "round";
+  x.shadowColor = "rgba(10,31,99,.3)"; x.shadowBlur = 30; x.shadowOffsetY = 12;
+  poly(); x.fillStyle = "#dce8f6"; x.strokeStyle = "#dce8f6"; x.lineWidth = 50; x.stroke(); x.fill();
+  x.shadowColor = "transparent";
+  poly(); x.fillStyle = "#fff"; x.strokeStyle = "#fff"; x.lineWidth = 46; x.stroke(); x.fill();
+  const g = x.createLinearGradient(0,10,0,370); g.addColorStop(0,"#0b2f8f"); g.addColorStop(.3,"#1d5fd1"); g.addColorStop(.52,"#9fccf4"); g.addColorStop(1,"#e2effd");
+  poly(); x.fillStyle = g; x.strokeStyle = g; x.lineWidth = 22; x.stroke(); x.fill();
+  x.save(); poly(); x.clip();
+  const pg = x.createLinearGradient(0,125,0,370); pg.addColorStop(0,"#fff"); pg.addColorStop(.62,"#f4f9ff"); pg.addColorStop(1,"#d6e8fb");
+  x.fillStyle = pg; x.beginPath(); x.moveTo(-10,150); x.bezierCurveTo(40,124,90,132,140,136); x.bezierCurveTo(190,140,230,128,270,128); x.bezierCurveTo(320,128,360,132,410,152); x.lineTo(410,400); x.lineTo(-10,400); x.closePath(); x.fill();
+  x.fillStyle = "#cfe2f8"; [[70,330,90,34],[320,336,100,36]].forEach(([a,b,c,d]) => { x.beginPath(); x.ellipse(a,b,c,d,0,0,7); x.fill(); });
+  x.fillStyle = "#e2eefb"; [[140,352,80,24],[270,356,90,26]].forEach(([a,b,c,d]) => { x.beginPath(); x.ellipse(a,b,c,d,0,0,7); x.fill(); });
+  x.restore();
+  const sp = (cx, cy, s, c) => { x.fillStyle = c; x.beginPath(); x.moveTo(cx, cy-s); x.quadraticCurveTo(cx, cy, cx+s, cy); x.quadraticCurveTo(cx, cy, cx, cy+s); x.quadraticCurveTo(cx, cy, cx-s, cy); x.quadraticCurveTo(cx, cy, cx, cy-s); x.fill(); };
+  sp(80,150,10,"#fff"); sp(322,158,9,"#fff"); sp(118,118,4,"#fff"); sp(292,112,5,"#fff"); sp(110,232,6,"rgba(29,95,209,.75)"); sp(304,220,5,"rgba(29,95,209,.6)");
+  // icon
+  x.save(); x.translate(200 - 14.8, 32); x.scale(29.6/24, 29.6/24); x.strokeStyle = "#fff"; x.lineWidth = 1.5; x.lineCap = "round"; x.lineJoin = "round";
+  x.stroke(new Path2D(ICONS[f.cat] || ICONS["青春"])); x.restore();
+  x.textAlign = "center"; x.textBaseline = "top";
+  x.fillStyle = "#fff"; x.font = '900 18px "Noto Sans TC", sans-serif'; x.fillText(`${f.cat}運勢`, 200, 67);
+  x.font = '14px "Noto Sans TC", sans-serif'; x.fillText("★".repeat(f.stars), 200, 94);
+  x.fillStyle = "#cfe4fb"; x.font = '700 10px "Cinzel", serif'; x.fillText(`${f.theme} · NO.${String(f.no).padStart(2,"0")}`, 200, 118);
+  x.fillStyle = "#0e3aa8"; x.font = '900 25px "Noto Sans TC", sans-serif'; x.fillText(`${LEVEL_NAME[f.stars]}・${f.title}`, 200, 140, 330);
+  x.strokeStyle = "rgba(29,95,209,.55)"; x.lineWidth = 2; x.beginPath(); x.moveTo(92,185); x.lineTo(308,185); x.stroke();
+  x.fillStyle = "#1d3f8f"; x.font = '700 14.8px "Noto Sans TC", sans-serif';
+  wrapLines(x, f.body, 224).forEach((l,i) => x.fillText(l, 200, 195 + i*23));
+  x.fillStyle = "#0e3aa8"; x.beginPath(); x.roundRect ? x.roundRect(158,253,84,22,11) : x.rect(158,253,84,22); x.fill();
+  x.fillStyle = "#fff"; x.font = '700 12.4px "Noto Sans TC", sans-serif'; x.fillText("本週提醒", 200, 257);
+  x.fillStyle = "#1d3f8f"; x.font = '500 12.4px "Noto Sans TC", sans-serif';
+  wrapLines(x, f.remind, 200).forEach((l,i) => x.fillText(l, 200, 281 + i*18.6));
+  x.restore();
+}
+async function shareMikuji(f){
+  try{ await document.fonts.ready; }catch(e){}
+  const W = 1080, H = 1350, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const x = cv.getContext("2d");
+  const g = x.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,"#040d33"); g.addColorStop(.5,"#14389a"); g.addColorStop(.82,"#6fb6ea"); g.addColorStop(1,"#eef7ff");
+  x.fillStyle = g; x.fillRect(0,0,W,H);
+  drawPolkaStars(x, W, H, 54, 0, rng("share"), .8);
+  x.textAlign = "center"; x.textBaseline = "alphabetic";
+  x.fillStyle = "#fff"; x.shadowColor = "rgba(143,205,244,.9)"; x.shadowBlur = 24;
+  x.font = '700 76px "LXGW WenKai TC", serif'; x.fillText("今天的水籤", W/2, 140);
+  x.shadowBlur = 0; x.font = '400 32px "LXGW WenKai TC", serif'; x.fillStyle = "#d9efff"; x.fillText("將壓力交給「水語」", W/2, 196);
+  drawOmikujiCanvas(x, 110, 250, 860, f);
+  x.textBaseline = "alphabetic";
+  x.fillStyle = "#0a1f63"; x.font = '900 34px "Noto Sans TC", sans-serif'; x.fillText("#可爾必思水籤　#將壓力交給水語", W/2, 1200);
+  x.font = '900 34px "Noto Sans TC", sans-serif'; x.fillText("可爾必思", W/2, 1268);
+  x.font = '700 18px "Cinzel", serif'; x.fillText("C A L P I S", W/2, 1296);
+  let url = ""; try{ url = cv.toDataURL("image/png"); }catch(e){}
+  sheet(`<h3>分享你的水籤</h3><p class="lead">存下來發限動，標記朋友，看看大家抽到什麼！</p><div class="memo"><img src="${url}" alt="水籤分享圖"></div>
+    <a class="pill blue block" href="${url}" download="calpis-mizumikuji.png">下載籤詩圖</a>`);
+}
 
 /* ======================================================
    ROUTER
    ====================================================== */
 let heroActive = true;
+function cur(){ const r = (location.hash || "#home").slice(1); return ["home","map","dipper","me","mikuji"].includes(r) ? r : "home"; }
 function route(){
-  let r = (location.hash || "#home").slice(1);
-  if(!["home","map","dipper","me"].includes(r)) r = "home";
+  const r = cur();
   $$(".view").forEach(v => v.classList.toggle("on", v.id === "v-"+r));
   $$("[data-r]").forEach(a => a.classList.toggle("on", a.dataset.r === r));
   if(r !== "home") scrollTo(0,0);
   heroActive = r === "home";
+  if(r === "mikuji") setTimeout(() => Water.size(), 30);
 }
 addEventListener("hashchange", route);
 document.addEventListener("click", e => {
   const a = e.target.closest("[data-about]"); if(!a) return;
   e.preventDefault();
-  if((location.hash || "#home") !== "#home") location.hash = "#home";
+  if(cur() !== "home") location.hash = "#home";
   setTimeout(() => $("#about").scrollIntoView({behavior:"smooth"}), 80);
 });
 
@@ -838,10 +1372,11 @@ function makeCode(){ let s = ""; for(let i=0;i<7;i++) s += CH[Math.floor(Math.ra
 function openLight(prefill = ""){
   if(!me.logged) return openLogin(() => openLight(prefill));
   sheet(`${mk}
-    <svg class="cap" viewBox="0 0 120 90"><ellipse cx="60" cy="72" rx="46" ry="10" fill="#040d33" opacity=".6"/><rect x="18" y="20" width="84" height="48" rx="10" fill="#f4faff"/>
-      <g stroke="#cfe4f8" stroke-width="2">${Array.from({length:10},(_,i) => `<line x1="${26+i*7.5}" y1="26" x2="${26+i*7.5}" y2="64"/>`).join("")}</g>
-      <ellipse cx="60" cy="20" rx="42" ry="9" fill="#e5f2ff"/><text x="60" y="23" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="8" fill="#1d5fd1" letter-spacing="1.5">XXXX-XXXX</text></svg>
-    <h3 class="hand">點亮一顆星</h3><p class="lead">打開瓶蓋，輸入內側的 8 碼序號。<br>星星會隨機落在 12 星座中的某一顆${isDay() ? `。<br><b style="color:#ffd77a">今天是可爾必思日，還會加碼點亮北斗七星！</b>` : "。"}</p>
+    <svg class="cap" viewBox="0 0 120 90"><defs><linearGradient id="capG" x1="0" x2="1"><stop offset="0" stop-color="#d4dce6"/><stop offset=".45" stop-color="#fff"/><stop offset="1" stop-color="#c8d2de"/></linearGradient></defs>
+      <ellipse cx="60" cy="74" rx="46" ry="9" fill="#040d33" opacity=".6"/><rect x="18" y="22" width="84" height="48" rx="8" fill="url(#capG)"/>
+      <g stroke="#c4cfdb" stroke-width="1.2">${Array.from({length:14},(_,i) => `<line x1="${24+i*5.5}" y1="26" x2="${24+i*5.5}" y2="66"/>`).join("")}</g>
+      <ellipse cx="60" cy="22" rx="42" ry="9" fill="#f2f6fa" stroke="#d5dde7"/><text x="60" y="25" text-anchor="middle" font-family="Cinzel" font-weight="700" font-size="8" fill="#1d5fd1" letter-spacing="1.5">XXXX-XXXX</text></svg>
+    <h3 class="hand">點亮一顆星</h3><p class="lead">打開瓶蓋，輸入內側的 8 碼序號。<br>星星會隨機落在 12 星座中的某一顆，還會獲得一張水籤券${isDay() ? `。<br><b style="color:#ffd77a">今天是可爾必思日，還會加碼點亮北斗七星！</b>` : "。"}</p>
     <input class="field code" id="code" maxlength="9" placeholder="XXXX-XXXX" value="${esc(prefill)}" autocomplete="off">
     <button class="pill blue block" id="go">點亮星星</button><div class="err" id="cErr"></div>
     <p class="foot-s"><button id="gen">展示用：產生測試序號</button></p>`);
@@ -887,7 +1422,11 @@ async function roulette(target){
     await sleep(60 + k*k*2.6);
   }
   await sleep(220); prev.classList.remove("scan");
-  $(`.medal[data-c="${target}"]`).scrollIntoView({behavior:"smooth", block:"center"});
+  const tm = $(`.medal[data-c="${target}"]`);
+  tm.scrollIntoView({behavior:"smooth", block:"center"});
+  await sleep(300);
+  const b = tm.querySelector(".disc").getBoundingClientRect();
+  FX.burst(b.left + b.width/2, b.top + b.height/2, false);
 }
 
 async function submit(){
@@ -899,43 +1438,54 @@ async function submit(){
   if(!z && !dp) return err("整片星河都亮了！等下一個可爾必思日再來。");
   if(busy) return;
   busy = true; Store.markUsed(raw); closeSheet();
+  me.mk.tickets++; saveMe();
   const wins = [];
   if(z){
     if(location.hash !== "#map"){ location.hash = "#map"; await sleep(120); }
     renderMap(); await roulette(z.c);
     const w = applyLight(z, me.id); w && wins.push(w);
     Store.save(room); renderAll(z);
-    toast(`✦ ${byId(z.c).zh} 亮起了一顆星`, SPARKS[Math.floor(Math.random()*SPARKS.length)]);
+    toast(`✦ ${byId(z.c).zh} 亮起了一顆星`, `獲得 1 張水籤券・${SPARKS[Math.floor(Math.random()*SPARKS.length)]}`);
   }
   if(dp){
-    await sleep(z ? 1700 : 0);
+    await sleep(z ? 1900 : 0);
     location.hash = "#dipper"; await sleep(500);
     const w = applyLight(dp, me.id); w && wins.push(w);
     Store.save(room); renderAll(dp);
-    toast(`🌟 可爾必思日加碼：${DIPPER.starNames[dp.i]}亮了`, `北斗七星 ${litOf(DIPPER).length} / 7`);
+    toast(`可爾必思日加碼：${DIPPER.starNames[dp.i]}亮了`, `北斗七星 ${litOf(DIPPER).length} / 7`);
   }
   busy = false;
   for(const w of wins){ await sleep(1400); await celebrate(w); }
 }
 
-async function simulate(){
-  if(busy || !room) return;
+function simFriend(){
   const fr = room.members.filter(m => m.sim);
-  let f;
   if(room.members.length < MAX && (!fr.length || Math.random() < .35)){
     const name = FRIENDS.find(n => !room.members.some(m => m.name === n)) || "朋友";
-    f = addMember(room, {id:uid(), name, sim:true});
-    Store.save(room); renderAll(); toast(`${name} 用 PIN Code 加入了房間`, "一起點亮星河吧！");
-    await sleep(1300);
-  }else if(fr.length) f = fr[Math.floor(Math.random()*fr.length)];
-  else return toast("房間已經滿 6 人了");
+    const f = addMember(room, {id:uid(), name, sim:true});
+    return {f, joined:true};
+  }
+  return fr.length ? {f: fr[Math.floor(Math.random()*fr.length)], joined:false} : null;
+}
+async function simulate(){
+  if(busy || !room) return;
+  const s = simFriend(); if(!s) return toast("房間已經滿 6 人了");
+  if(s.joined){ Store.save(room); renderAll(); toast(`${s.f.name} 用 PIN Code 加入了房間`, "一起點亮星河吧！"); await sleep(1300); }
   const z = pickZodiac(); if(!z) return toast("星河已經全亮了！");
   busy = true;
   location.hash = "#map"; await sleep(150); renderMap(); await roulette(z.c);
-  const w = applyLight(z, f.id); Store.save(room); renderAll(z);
-  toast(`${f.name} 點亮了 ${byId(z.c).zh} 的一顆星`, "朋友的星星，也是我們的星河");
+  const w = applyLight(z, s.f.id); Store.save(room); renderAll(z);
+  toast(`${s.f.name} 點亮了 ${byId(z.c).zh} 的一顆星`, "朋友的星星，也是我們的星河");
   busy = false;
   if(w){ await sleep(1400); celebrate(w); }
+}
+function simMikuji(){
+  if(!room) return toast("先登入，才能和朋友比籤運");
+  const s = simFriend(); if(!s) return toast("房間已經滿 6 人了");
+  const f = drawFortune();
+  room.feed.unshift({by:s.f.id, kind:"mikuji", f, at:Date.now()});
+  Store.save(room); renderAll();
+  toast(`${s.f.name} 抽到 ${f.cat}運勢・${LEVEL_NAME[f.stars]}`, f.title);
 }
 
 /* ---- celebrate ---- */
@@ -954,9 +1504,9 @@ function celebrate(d){
     }else{
       const grand = ZODIAC.every(z => litOf(z).length === z.s.length);
       sheet(`<div class="detail-art">${starSVG(c, {medal:true, full:true, dust:true, seq:true})}</div>
-        <h3>我們一起點亮了${c.zh}</h3><p class="lead">${c.story}</p>${whos}
+        <h3>我們一起點亮了${c.zh}</h3><p class="story">${c.story}</p>${whos}
         <div class="prize"><b>每位成員都獲得：${d.prize}</b>兌換碼<code>${d.code}</code></div>
-        ${grand ? `<div class="prize" style="border-color:#ffd77a"><b>🎉 12 星座全部點亮！</b>全星河大獎：可爾必思一箱＋限定星空保冷袋 抽獎資格</div>` : ""}
+        ${grand ? `<div class="prize" style="border-color:#ffd77a"><b>12 星座全部點亮！</b>全星河大獎：可爾必思一箱＋限定星空保冷袋 抽獎資格</div>` : ""}
         <button class="pill blue block" id="cOk" style="margin-top:14px">收進我的星河</button>`);
     }
     $("#cOk").onclick = () => closeSheet();
@@ -972,9 +1522,10 @@ $("#medals").addEventListener("click", e => {
   const done = room && room.done.find(d => d.c === c.id);
   sheet(`<div class="detail-art" style="margin-top:10px">${starSVG(c, {medal:true, dust:true, big:true, who:true})}</div>
     <div class="dname"><b>${c.zh}</b><em>${c.en}</em></div>
+    <h4>${c.tagline}</h4>
+    <p class="story">${c.story}</p>
     <ul class="starlist">${Object.entries(c.names).map(([i,n],k) => `<li class="${set.has(+i) ? "on" : ""}"><i>★</i>${n}${k === 0 ? `<span class="tag open">主星</span>` : ""}<span style="margin-left:auto;font-size:12px;color:var(--dim)">${set.has(+i) ? "已點亮" : "未點亮"}</span></li>`).join("")}</ul>
-    <p class="lead" style="text-align:left">${c.story}</p>
-    <p class="lead" style="text-align:left;margin:-6px 0 0">已點亮 ${lit.length} / ${c.s.length} 顆${Object.keys(cnt).length ? "・" + Object.entries(cnt).map(([id,n]) => `${id === me.id ? "你" : esc(member(id).name)} ${n}`).join("、") : ""}</p>
+    <p class="lead" style="text-align:left;margin:0">已點亮 ${lit.length} / ${c.s.length} 顆${Object.keys(cnt).length ? "・" + Object.entries(cnt).map(([id,n]) => `${id === me.id ? "你" : esc(member(id).name)} ${n}`).join("、") : ""}</p>
     <div class="prize">${done ? `<b>已集滿！</b>${done.prize}<code>${done.code}</code>` : `<b>集滿回饋</b>${PRIZES[ZODIAC.indexOf(c) % PRIZES.length]}`}</div>
     <button class="pill blue block" data-act="light" style="margin-top:14px">輸入序號，點亮星星</button>
     <p class="foot-s">星星會隨機落下，也許下一顆就在${c.zh}。</p>`);
@@ -986,13 +1537,32 @@ $("#viewbar").addEventListener("click", e => {
 });
 
 /* ---- actions ---- */
+function findFortune(id){ return me.mk.bag.find(f => f.id === id) || (room && (room.feed.find(e => e.kind === "mikuji" && e.f.id === id) || {}).f); }
 document.addEventListener("click", e => {
+  const li = e.target.closest("[data-mk],[data-mk-feed]");
+  if(li){
+    const f = findFortune(li.dataset.mk || li.dataset.mkFeed); if(!f) return;
+    sheet(`<div style="width:min(340px,88%);margin:14px auto 0">${omikujiHTML(f)}</div>
+      <div class="row" style="justify-content:center"><button class="pill blue sm" id="shOne">分享籤詩圖</button></div>`);
+    $("#shOne").onclick = () => shareMikuji(f);
+    return;
+  }
   const a = e.target.closest("[data-act]"); if(!a) return;
   const act = a.dataset.act;
   if(act === "light"){ if(busy) return; openLight(); }
   else if(act === "login") openLogin();
   else if(act === "share"){ copy(a.dataset.link); toast("邀請連結已複製", `朋友也可以輸入 PIN：${room.pin}`); }
   else if(act === "sim") simulate();
+  else if(act === "simMk") simMikuji();
+  else if(act === "ticket"){ me.mk.tickets++; saveMe(); renderMikuji(); toast("+1 張水籤券"); }
+  else if(act === "shareMk"){ if(mkCur) shareMikuji(mkCur); }
+  else if(act === "cmpMk"){
+    if(!mkCur) return;
+    const link = location.href.split(/[?#]/)[0] + (room ? "?pin=" + room.pin : "") + "#mikuji";
+    copy(`我抽到「${mkCur.cat}運勢・${LEVEL_NAME[mkCur.stars]}・${mkCur.title}」：${mkCur.body} 你抽到什麼？ ${link} #可爾必思水籤`);
+    toast("籤詩和連結已複製", "貼給朋友，看看誰的籤比較好！");
+  }
+  else if(act === "againMk") resetPond();
   else if(act === "memorial") openMemorial();
   else if(act === "logout"){ me.logged = false; saveMe(); room = null; renderAll(); toast("已登出"); }
   else if(act === "newroom"){ enterRoom(genPin()); renderAll(); toast(`已建立新房間 ${room.pin}`, "分享 PIN Code 邀請朋友"); }
@@ -1088,9 +1658,66 @@ function drawPolkaStars(x, W, H, gap, t, rnd, from = .62){
 }
 
 /* ======================================================
-   BACKGROUND CANVASES
+   互動：點哪裡，哪裡就有漣漪＋水玉星點
    ====================================================== */
 const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FX = (() => {
+  const cv = $("#fx"), x = cv.getContext("2d"), dpr = Math.min(devicePixelRatio || 1, 2);
+  let rings = [], dots = [], running = false;
+  function size(){ cv.width = innerWidth*dpr; cv.height = innerHeight*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
+  size(); addEventListener("resize", size);
+  function burst(px, py, light){
+    const col = light ? [29,95,209] : [232,246,255];
+    rings.push({x:px, y:py, r:2, a:.9, c:col}, {x:px, y:py, r:0, a:.6, c:col, d:6});
+    const n = 9 + Math.floor(Math.random()*5);
+    for(let i=0;i<n;i++){
+      const ang = Math.random()*Math.PI*2, sp = 1.2 + Math.random()*2.8;
+      dots.push({x:px, y:py, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - .6, r:1.2 + Math.random()*3.2, a:1, c: light ? (Math.random() < .5 ? [29,95,209] : [95,170,235]) : (Math.random() < .3 ? [143,205,244] : [255,255,255]), tw:Math.random()*6});
+    }
+    if(!running) loop();
+  }
+  function trail(px, py){
+    dots.push({x:px, y:py, vx:(Math.random()-.5)*.6, vy:-.3 - Math.random()*.5, r:.8 + Math.random()*1.8, a:.9, c:[255,255,255], tw:Math.random()*6});
+    if(!running) loop();
+  }
+  function loop(){
+    running = true;
+    x.clearRect(0,0,innerWidth,innerHeight);
+    rings = rings.filter(r => r.a > .02);
+    for(const r of rings){
+      if(r.d){ r.d--; continue; }
+      r.r += 2.4; r.a *= .93;
+      x.strokeStyle = `rgba(${r.c},${r.a})`; x.lineWidth = 1.6;
+      x.beginPath(); x.arc(r.x, r.y, r.r, 0, 7); x.stroke();
+    }
+    dots = dots.filter(d => d.a > .03);
+    for(const d of dots){
+      d.x += d.vx; d.y += d.vy; d.vx *= .95; d.vy = d.vy*.95 + .02; d.a *= .965; d.tw += .3;
+      const a = d.a * (.65 + .35*Math.sin(d.tw));
+      const g = x.createRadialGradient(d.x,d.y,0,d.x,d.y,d.r*3);
+      g.addColorStop(0,`rgba(${d.c},${a})`); g.addColorStop(.35,`rgba(${d.c},${a*.8})`); g.addColorStop(1,`rgba(${d.c},0)`);
+      x.fillStyle = g; x.beginPath(); x.arc(d.x,d.y,d.r*3,0,7); x.fill();
+    }
+    if(rings.length || dots.length) requestAnimationFrame(loop);
+    else { running = false; x.clearRect(0,0,innerWidth,innerHeight); }
+  }
+  if(!still){
+    document.addEventListener("pointerdown", e => {
+      if(e.target.closest("input, #paper")) return;
+      burst(e.clientX, e.clientY, !!e.target.closest(".daysec, .omikuji"));
+    }, {passive:true});
+    let last = 0;
+    $("#hero").addEventListener("pointermove", e => {
+      if(e.pointerType !== "mouse") return;
+      const now = performance.now(); if(now - last < 45) return; last = now; trail(e.clientX, e.clientY);
+    });
+  }
+  return { burst: still ? () => {} : burst };
+})();
+
+/* ======================================================
+   BACKGROUND CANVASES
+   ====================================================== */
 (function hero(){
   const cv = $("#heroSky"), x = cv.getContext("2d"), off = document.createElement("canvas"), ox = off.getContext("2d");
   let W, H, tw = [];
@@ -1102,7 +1729,6 @@ const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const g = ox.createLinearGradient(0,0,0,H);
     g.addColorStop(0,"#040d33"); g.addColorStop(.45,"#0c2a7e"); g.addColorStop(.7,"#2a64c4"); g.addColorStop(1,"#6fb6ea");
     ox.fillStyle = g; ox.fillRect(0,0,W,H);
-    // 乳白色的銀河（Milky Way ↔ 乳酸菌飲料）
     const r = rng("milky"), ang = -0.62, cx = W*.55, cy = H*.38, len = Math.hypot(W,H);
     for(let i=0;i<14;i++){
       const t = (i/13 - .5) * len, px = cx + Math.cos(ang)*t, py = cy + Math.sin(ang)*t;
@@ -1154,15 +1780,7 @@ const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
   f();
 })();
-
-/* 瓶身水玉：部分水玉會像星星一樣閃 */
-(function bottleDots(){
-  let s = ""; const r = rng("bottle");
-  for(let row=0, y=62; y<300; row++, y+=15) for(let xx = (row%2 ? 8 : 0); xx < 124; xx += 16){
-    s += `<circle cx="${xx}" cy="${y}" r="4.2" fill="#6db8ee" ${r() < .22 ? `class="dot-tw" style="animation-delay:${(r()*2.6).toFixed(2)}s"` : ""}/>`;
-  }
-  $("#bdots").innerHTML = s;
-})();
+$("#heroBottle").innerHTML = bottleG({twinkle:true, seed:"hero"});
 
 /* ======================================================
    MISC
@@ -1171,7 +1789,7 @@ let tt;
 function toast(t, sub){ const el = $("#toast"); el.innerHTML = esc(t) + (sub ? `<small>${esc(sub)}</small>` : ""); el.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => el.classList.remove("show"), 2800); }
 function copy(t){ try{ navigator.clipboard.writeText(t); }catch(e){} }
 $("#reset").onclick = () => {
-  if(!confirm("確定清除所有會員、房間與星星資料？")) return;
+  if(!confirm("確定清除所有會員、房間、星星與水籤資料？")) return;
   try{ Object.keys(localStorage).filter(k => k.startsWith("calpis-")).forEach(k => localStorage.removeItem(k)); sessionStorage.clear(); }catch(e){}
   location.href = location.href.split(/[?#]/)[0];
 };
